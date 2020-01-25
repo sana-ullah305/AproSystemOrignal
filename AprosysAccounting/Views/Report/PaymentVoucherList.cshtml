@@ -1,0 +1,51 @@
+﻿
+
+<div class="container" style="margin-top:20px">
+    <div style="margin-top:80px">
+        <h3>Cash out list</h3>
+        <div class="row">
+            <div class="col-sm-1 text-right">
+                <label>Start</label>
+            </div>
+            <div class="col-sm-3">
+
+                <div class="input-group date " data-provide="datepicker">
+                    <input type="text" id="dtPaymentVoucherMainStartDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1 text-right">
+                <label>End</label>
+            </div>
+            <div class="col-sm-3">
+
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtPaymentVoucherMainEndDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <input type="button" class="btn btn-success" id="btnPaymentVoucherDownload" value="Get Cash Out List" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/custom/Report.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#dtPaymentVoucherMainStartDate").val(moment().subtract('days', 7).format('YYYY-MM-DD'));
+        $("#dtPaymentVoucherMainEndDate").val(moment().format('YYYY-MM-DD'));
+        ReportsTrigger();
+
+    });
+</script>

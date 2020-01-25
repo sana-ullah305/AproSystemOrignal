@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+<div class="container">
+    <h2>Payment History</h2>
+    <hr />
+    <div class="row">
+        <div class="col-sm-3"><label>Date Start</label></div>
+        <div class="col-sm-3"><label>Date End</label></div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" id="dtp_sales_history_MainStartDate" class="form-control" readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" id="dtp_sales_history_MainEndDate" class="form-control " readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <input type="button" class="btn btn-success" id="btn_payment_history_Search" value="Search" />
+        </div>
+        <div class="col-sm-3">
+
+        </div>
+    </div>
+</div>
+<br />
+<br />
+
+<div class="container">
+
+    <table id="tblPaymentHistory" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center success">Invoice No.</th>
+                <th class="text-center success">Customer Name</th>
+                <th class="text-center success">Transaction Date</th>
+                <th class="text-center success">Amount</th>
+                <th class="text-center success">Recieved By</th>
+                <th class="text-center success">Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+<script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+<script src="~/Theme/js/jquery.inputpicker.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/PaymentHistory.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        PaymentHistoryTrigger();
+    });
+</script>
+

@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Capital Management";
+}
+
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+
+
+
+
+
+
+<div class="container" style="margin-top:20px">
+    <h2>Investor Management</h2>
+    <div style="margin-top:20px">
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-3"><input class="btn btn-success" type="button" id="btn_add_newInvestor" name="AddBankAccount" value="Add Investor" /></div>
+        </div>
+        <br />
+        <table id="tblInvestorDetail" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center success">Investor Name</th>
+                    <th class="text-center success">Current Investment</th>
+                    <th class="text-center success">Action</th>
+                </tr>
+            </thead>
+            <tbody class="tblInvestorDetails_tblactive"></tbody>
+        </table>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+<div class="modal fade" id="AddInvestorModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddInvestorModal" id="mdl_addExpense" style="width:900px">
+        <div class="modal-content col-xs-6" style="margin-top: 10%;margin-left: 25%;">
+            <div class="modal-header h5" id="div_Equity_AddNewInvestor">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Add Investor</h4>
+            </div>
+            <div class="modal-body ">
+                <input type="hidden" name="InvestorId" value="" id="investor_id" />
+                <div class="form-group">
+                    <label>Investor Name</label>
+                    <input type="text" name="NewInvestorName" class="form-control" id="new_invstr_name" maxlength="50" />
+                </div>
+                @*<br />
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_Investor_equity_amount" maxlength="8" />
+                        </div>
+                    </div>*@
+                <br />
+                <br />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-success" id="btn_Investor_SaveInvestor" value="Save" />
+                    <a href="#" class="btn btn-default" data-dismiss="modal" id="btn_service_closeService">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+<script src="~/Theme/js/jquery.inputpicker.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/Equity.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        EquityTrigger();
+    });
+</script>

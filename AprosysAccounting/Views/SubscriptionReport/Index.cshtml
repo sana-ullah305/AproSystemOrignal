@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Subscription Report";
+}
+
+<h2>Subscription Report</h2>
+<div class="row">
+    <div class="col-md-1 text-right">
+
+    </div>
+    <div class="col-md-2">
+        <label>Select Year</label>
+        <select class="form-control ddlYear">
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Month</label>
+        <select class="form-control ddlMonth">
+            <option value="0">--All--</option>
+            <option value="1">Jan</option>
+            <option value="2">Feb</option>
+            <option value="3">Mar</option>
+            <option value="4">Apr</option>
+            <option value="5">May</option>
+            <option value="6">Jun</option>
+            <option value="7">Jul</option>
+            <option value="8">Aug</option>
+            <option value="9">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Type</label>
+        <select disabled="true" class="form-control ddlType">
+            <option value="0">--All--</option>
+            <option value="1">Paid</option>
+            <option value="2">Unpaid</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Sub Type</label>
+        <select class="form-control ddlSubType">
+            <option value="0">Active</option>
+            <option value="1">Suspended</option>
+            
+        </select>
+    </div>
+    <div class="col-md-3">
+        <br/>
+        <div class="btn btn-default btn-lg btn-primary btnViewReport">VIEW</div>
+        <div class="btn btn-default btn-lg btn-primary btnDownloadReport">Download</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <iframe id="ReportPreview" src="" style="height:70vh;width:100%" frameborder="0"></iframe>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.ddlYear').val(2019);
+        $('.ddlMonth').change(function () {
+            if (($(this).val() * 1) == 0) { $('.ddlType').val(0); $('.ddlType').prop('disabled', true); }
+            else { $('.ddlType').prop('disabled', false); }
+
+        })
+        $(".btnDownloadReport").click(function () {
+            var myurl = "/Report/DownloadMonthlySubscription?";
+            var mydata = new Object();
+            mydata.year = $(".ddlYear").val();
+            mydata.month = $(".ddlMonth").val();
+            mydata.type = $(".ddlType").val();
+            mydata.SubsType = $(".ddlSubType").val();;
+            DownloadFiles(myurl, mydata);
+        });
+
+        $(".btnViewReport").click(function () {
+            var myurl = "/Report/DownloadMonthlySubscription?";
+            var mydata = new Object();
+            mydata.year = $(".ddlYear").val();
+            mydata.month = $(".ddlMonth").val();
+            mydata.type = $(".ddlType").val();
+            mydata.Preview = true;
+            mydata.SubsType = $(".ddlSubType").val();;
+            PreviewReport(myurl, mydata);
+        });
+    });
+
+    //TODO Move Preview Report to Generic Helper Class
+    function PreviewReport(myurl, mydata) {
+        mydata.Preview = true;
+        myurl = myurl + $.param(mydata);
+        ShowAjaxLoader();
+        $("#ReportPreview").off("load");
+        $("#ReportPreview").on("load", function () {
+            HideAjaxLoader();
+        });
+        $("#ReportPreview").attr("src", myurl);
+    }
+
+</script>

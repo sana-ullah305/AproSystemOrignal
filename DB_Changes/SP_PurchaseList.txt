@@ -1,0 +1,29 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[GetPurchaseList]    Script Date: 2/13/2019 3:53:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetPurchaseList]
+(
+	@vendorID AS INT,
+	@itemID AS INT,
+	@dtStart datetime,
+	@dtEnd datetime
+)
+AS
+BEGIN
+
+SELECT
+	GL.[ItemId],item.[ItemCode],item.[Name],GL.[Quantity],GL.[UnitPrice],GL.[Debit],GL.[ActivityTimestamp],GL.[InvoiceNo],VEND.[FirstName],VEND.[LastName]
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Item] AS item ON item.[Id] = GL.[ItemId]
+	INNER JOIN [Vendor] AS VEND ON VEND.[ID] = GL.[VendorId]
+WHERE
+	GL.[TranTypeId] = 1 AND GL.[IsActive] = 1 AND GL.[ItemId] IS NOT NULL
+	AND (@vendorID = 0 OR GL.[VendorId] = @vendorID)
+	AND (@itemID = 0 OR GL.[ItemId] = @itemID)
+	AND ((@dtStart IS NULL OR GL.[ActivityTimestamp] >= @dtStart) AND (@dtEnd IS NULL OR GL.[ActivityTimestamp] <= @dtEnd))
+END

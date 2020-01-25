@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+
+<div class="container" style="margin-top:20px">
+    <h2>Equity Management</h2>
+
+    <div style="margin-top:80px">
+        <input type="hidden" name="withDrawOrDeposit" id="hdn_equity_deposit_or_withdraw" value="" />
+        @*<div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
+                    @*<div class="col-sm-3"><label>Service Name</label></div>
+                    <div class="col-sm-6"><input type="text" id="txt_service_Name" class="form-control" maxlength="50"></div>
+                    <div class="col-sm-3"></div>
+
+                </div>
+
+            </div>*@
+
+        <div class="row">
+            <div class="col-sm-3" style="float:right">
+                <input type="button" class="btn btn-success col-sm-10" id="btn_equity_Deposit" value="Deposit" style="float:right" />
+            </div>
+            <div class="col-sm-3" style="float:right">
+                <input type="button" class="btn btn-success col-sm-10" id="btn_equity_WithDraw" value="WithDraw" style="float:right" />
+            </div>
+        </div>
+
+        <br />
+
+        <table id="tblEquityInformation" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center success">InvoiceNo</th>
+                    <th class="text-center success">Activity</th>
+                    <th class="text-center success">Equity</th>
+                    <th class="text-center success">Bank Account</th>
+                    <th class="text-center success">Amount</th>
+                    
+                    <th class="text-center success">Activity Time</th>
+                    <th class="text-center success">Action</th>
+
+                </tr>
+            </thead>
+            <tbody class="tblactive"></tbody>
+
+        </table>
+    </div>
+
+
+
+
+</div>
+<div class="modal fade" id="AddNewEquityModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddNewRevnueServiceModal" id="mdl_addExpense" style="width:900px">
+        <div class="modal-content col-xs-11">
+            <div class="modal-header h5" id="div_Equity_AddNewEquity">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Edit Equity</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+                    <div class="col-md-5">
+
+                        <label>Investor Name</label>
+                        <select class="form-control dd_equity_investor" id="dd_equity_investor">
+                            <option value="0" selected></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Tran. Mode</label>
+                        <select class="form-control dd_equity_tranMode" id="dd_equity_tranMode">
+                            @*<option value="0" selected></option>*@
+                            <option value="1" selected>By Cash</option>
+                            <option value="2">By Bank</option>
+                        </select>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Amount</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_equity_amount" maxlength="8" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    @*<div class="col-md-4"></div>*@
+                    <div class="col-sm-6">
+                        <label>Activity Time</label>
+                        <div class="input-group datetimepker">
+                            <input type="text" class="form-control datetimepker linkToDatePermission" id="dtp_equity_activityTime">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Bank Account</label>
+                        <select class="form-control dd_equity_bankNames" id="dd_equity_bankNames">
+                            <option value="0" selected></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Comments</label>
+                        <textarea type="text" class="form-control txt_equity_comments" id="txt_equity_comments" style="resize:none;" ></textarea>
+                    </div>
+                </div>
+                <br />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-success" id="btn_equity_SaveEquity" value="Save" />
+                    <a href="#" class="btn btn-default" data-dismiss="modal" id="btn_service_closeService">Close</a>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+<script src="~/Theme/js/jquery.inputpicker.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/Equity.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        EquityTrigger();
+    });
+</script>
+
+

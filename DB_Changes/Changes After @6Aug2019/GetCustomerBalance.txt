@@ -1,0 +1,28 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[GetCustomerBalance]    Script Date: 8/27/2019 6:13:05 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetCustomerBalance]
+(
+	@cstID int
+)
+AS
+BEGIN
+SELECT
+	SUM(ISNULL(GL.[DEBIT],0))-SUM(ISNULL(GL.[CREDIT],0)) AS Balance,GL.[CustId], CST.[FirstName] + ' ' + CST.[LastName] AS customer
+FROM 
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+WHERE
+	([CoaId] =10 OR
+	(CoaId=100 AND InvoiceNo LIKE '%RCT%')) --AccountReceivable,Monthly Subscription
+	AND (@cstID = 0 OR GL.[CustId] = @cstID)
+	AND GL.[IsActive] = 1
+GROUP BY
+	GL.[CustId], CST.[FirstName], CST.[LastName]
+
+END
+

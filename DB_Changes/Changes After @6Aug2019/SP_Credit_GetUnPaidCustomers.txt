@@ -1,0 +1,20 @@
+USE [TotalDistribution]
+GO
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnPaidCustomers]    Script Date: 24/09/2019 7:29:39 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[Credit_GetUnPaidCustomers]
+
+AS
+
+BEGIN
+
+SELECT Distinct C.Id,C.LastName+' '+C.FirstName CustomerName FROM Customer C 
+INNER JOIN Acc_GL GL ON C.Id=GL.CustId
+WHERE GL.TranTypeId=2 AND GL.CoaId=10  AND GL.IsActive=1
+
+END
+

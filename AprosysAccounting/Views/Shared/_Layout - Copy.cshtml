@@ -1,0 +1,275 @@
+﻿
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Tawakal Traders</title>
+
+    <link href="~/Theme/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Theme/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Toastr style -->
+    <link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <!-- Gritter -->
+    <link href="~/Theme/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+
+    @*<link href="~/Theme/css/plugins/datapicker/datepicker3.css" rel="stylesheet" />*@
+    <link href="~/Theme/css/animate.css" rel="stylesheet">
+    <link href="~/css/custom/_Layout.css" rel="stylesheet" />
+
+
+    <!-- Datatable css -->
+    <link href="~/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet" />
+    <link href="~/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet" />
+    <link href="~/css/plugins/dataTables/fixedHeader.dataTables.css" rel="stylesheet" />
+
+    <link href="~/Theme/css/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <!-- Mainly scripts -->
+    @*<script src="~/Theme/js/jquery-3.1.1.min.js"></script>*@
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Theme/js/bootstrap.min.js"></script>
+    <script src="~/Theme/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Theme/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <link href="~/Theme/css/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+    <!-- Flot -->
+    <script src="~/Theme/js/plugins/flot/jquery.flot.js"></script>
+    <script src="~/Theme/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="~/Theme/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="~/Theme/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="~/Theme/js/plugins/flot/jquery.flot.pie.js"></script>
+
+    <!-- Peity -->
+    <script src="~/Theme/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="~/Theme/js/demo/peity-demo.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="~/Theme/js/inspinia.js"></script>
+    <script src="~/Theme/js/plugins/pace/pace.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="~/Theme/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- GITTER -->
+    <script src="~/Theme/js/plugins/gritter/jquery.gritter.min.js"></script>
+
+    <!-- Sparkline -->
+    <script src="~/Theme/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="~/Theme/js/demo/sparkline-demo.js"></script>
+
+    <!-- ChartJS-->
+    <script src="~/Theme/js/plugins/chartJs/Chart.min.js"></script>
+
+    <!-- Toastr -->
+    @*<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>*@
+
+
+    <script src="~/Theme/js/plugins/fullcalendar/moment.min.js"></script>
+
+
+    <!-- Datatable js -->
+    <script src="~/Theme/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="~/Theme/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="~/Theme/js/plugins/dataTables/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Theme/js/plugins/dataTables/dataTables.responsive.js"></script>
+    <script src="~/Theme/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+    <script src="~/Theme/js/plugins/dataTables/jquery.dataTables.js"></script>
+    @*<script src="~/Theme/js/plugins/datapicker/bootstrap-datepicker.js"></script>*@
+
+    <script src="~/Theme/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <link href="~/Theme/css/plugins/datapicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Theme/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+
+    @*<link href="~/Theme/css/plugins/Datetimepickerv3/bootstrap-datetimepicker.css" rel="stylesheet" />*@
+    <link href="~/Theme/css/plugins/Datetimepickerv3/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <script src="~/Theme/js/plugins/Datetimepickerv3/bootstrap-datetimepicker.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/custom/DownloadFile.js"></script>
+
+    <script src="~/Scripts/custom/GenericLib.js"></script>
+
+</head>
+
+
+<body style="background-color:white;">
+    <nav  class="navbar navbar-static-top" role="navigation">
+        <div class="navbar-collapse collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/Sales/Index">Home</a></li>
+
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">Sales <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="/Purchase/Index">Purchase Management</a></li>
+                        <li><a href="/Sales/Index">Sales Management</a></li>
+
+                    </ul>
+                </li>
+
+                @*<li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">Subscriptions<span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="/ReceiptVoucher/Index">Monthly Payment</a></li>
+                        <li class="hidden"><a href="/SubscriptionManagment/Index">Subscription Management</a></li>
+                       
+
+                    </ul>
+                </li>*@
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">Cash Flow <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="/PaymentVoucher/Index">Cash OUT</a></li>
+                        <li><a href="/Banks/Index">Banks</a></li>
+                        <li><a href="/CreditSales/Index">Pending Invoices</a></li>
+                        <li><a href="/PaymentHistory/Index">Payment History</a></li>
+                        <li><a href="/ChequeManagement/Index">OutStanding Cheque</a></li>
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">Inventory <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                       
+                        <li><a href="/Item/Index">Item Management</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li class="hidden"><a href="/InventoryManagement/Index">Inventory</a></li>
+                        <li><a href="/Report/PurchaseList/">Purchases</a></li>
+                        <li><a href="/Report/ItemsSalesProfitList/">Sales</a></li>
+                        <li><a href="/Report/SalesPerson/">Sales Person</a></li>
+                        <li><a href="/Report/CustomerReports/">Customers</a></li>
+                        <li class="hidden"><a href="/SubscriptionReport/Index">Subscriptions</a></li>
+                        <li class="dropdown-submenu">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">Accounts <span class="caret"></span></a>
+                             <ul role="menu" class="dropdown-menu">
+                                 <li class="hidden"><a href="/Report/TrialBalance/">Trial Balance</a></li>
+                                 <li><a href="/Report/IncomeStatement/">Income Statement</a></li>
+                                 <li><a href="/DailyCashFlow/Index">Daily CashFlow</a></li>
+                                 <li class="hidden"><a href="/Report/WeeklyCashFlow">Weekly CashFlow</a></li>
+                                 <li class="hidden"><a href="/CashFlowReport/Index/">Cash Flow</a></li>
+                                 <li><a href="/Report/AccountsPayable/">Account Payable</a></li>
+                                 <li><a href="/Report/AccountsReceivable/">Accounts Receivable</a></li>
+                                 <li><a href="/Report/PaymentVoucherList/">Cash Out List</a></li>
+                                 <li><a href="/ReportBankStatement/Index">Banks</a></li>
+                             </ul>
+                        </li>
+                        
+                       
+
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown">Configuration <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="/Customer/Index">Customer Management</a></li>
+                        <li><a href="/SalesPersonManagement/Index">Sales Person Management</a></li>
+                        <li><a href="/Vendor/Index">Vendor Management</a></li>   
+                        <li><a href="/User/Index">User Management</a></li>
+                        <li><a href="/Service/Index">Service Management</a></li>
+                        <li><a href="/OilGradeManagement/Index">Oil Grade Management</a></li>
+                        <li><a href="/Expense/Index">Expense Management</a></li>
+                        <li><a href="/Equity/InvestorManagement">Investor Management</a></li>
+                        <li><a href="/Equity/Index">Equity Management</a></li>
+                        <li><a href="/ReportConfig/Index">Report Config</a></li> 
+                        <li><a href="/BonusRevenue/Index">Bonus Revenue</a></li>
+                        <li><a href="/BanksConfiguration/Index">Banks Config</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-top-links navbar-right ">
+                <li class="UserName_"></li>
+                <li><a class="btnlogout" href="/Admin/Logout">Logout</a></li>
+               
+            </ul>
+        </div>
+
+    </nav>
+    <div>
+        @RenderBody()
+    </div>
+    <input id="InpHAllowEditDate" type="hidden" value="@Config.AllowEditDate.ToString()" />
+    <script>
+
+         @{
+             var oldType = Html.ViewContext.HttpContext.Response.ContentType;
+         }
+
+        var UserInfo=  @Html.Action("GetGlobalUserInfo", "PermissionAPI");
+
+        @{
+        Html.ViewContext.HttpContext.Response.ContentType = oldType;
+          }
+
+
+        $ ( '.dropdown-submenu>a').on("click", function(e){
+            $(this).next('ul').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        //if (GlobalPermission.AdminRights) { $("#lnk_EmpLoyeeInfo").removeClass("hidden");$("#lnk_AttributeSettings").removeClass("hidden"); }
+        //$('.UserName_').text(GlobalPermission.UserID);
+
+
+        //$(document).ready(function () {
+        //    Init_Layout();
+        //});
+        $('.UserName_').text(UserInfo.userId);
+
+        $('.date').datepicker({format: 'yyyy-mm-dd',clearBtn:true});
+        $('input.datetimepker').datetimepicker({ format: 'YYYY-MM-DD hh:mm:ss A', ignoreReadonly: true });
+        $(document).on("click",".datetimepker .input-group-addon",function(){
+            $(this).closest(".datetimepker").find("input").focus();
+        });
+
+        $(document).on("click",".datetimepkerClone .input-group-addon",function(){
+            $(this).closest(".datetimepkerClone").find("input").focus();
+        });
+
+
+
+        $(".CurrencyFormatting").inputmask('currency', { rightAlign: true, prefix: '', autoGroup: false });
+        $(".CurrencyFormattingwithouminus").inputmask('currency', { rightAlign: true, prefix: '', autoGroup: false ,allowMinus: false });
+
+
+
+        $('.StopPasting').bind("paste",function(e) {
+            e.preventDefault();
+        });
+
+        if($("#InpHAllowEditDate").val().toLowerCase()!="true"){
+            //InpHAllowEditDate Will Get Value from Config to determine if date edit should be possible or not
+            $(".linkToDatePermission").attr("disabled","disabled");
+        }
+        
+
+    </script>
+    <style>
+       
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+</style>
+ 
+</body>
+</html>

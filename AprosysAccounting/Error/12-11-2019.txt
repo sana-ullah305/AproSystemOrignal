@@ -1,0 +1,48 @@
+12-11-2019 18:33:22 - ErrorLog : Error for GUID=988142da-777a-4733-9ef2-33957462396a Url  http://localhost:59871/Report/DownloadItemWiseSales?dtStart=2019-12-04&dtEnd=2019-12-11&Preview=true - System.Data.Entity.Core.EntityCommandExecutionException: The data reader is incompatible with the specified 'AprosysAccountingModel1.Report_ItemWiseSale_Result'. A member of the type, 'PackingInLitre', does not have a corresponding column in the data reader with the same name.
+   at System.Data.Entity.Core.Query.InternalTrees.ColumnMapFactory.GetMemberOrdinalFromReader(DbDataReader storeDataReader, EdmMember member, EdmType currentType, Dictionary`2 renameList)
+   at System.Data.Entity.Core.Query.InternalTrees.ColumnMapFactory.GetColumnMapsForType(DbDataReader storeDataReader, EdmType edmType, Dictionary`2 renameList)
+   at System.Data.Entity.Core.Query.InternalTrees.ColumnMapFactory.CreateColumnMapFromReaderAndType(DbDataReader storeDataReader, EdmType edmType, EntitySet entitySet, Dictionary`2 renameList)
+   at System.Data.Entity.Core.Query.InternalTrees.ColumnMapFactory.CreateFunctionImportStructuralTypeColumnMap(DbDataReader storeDataReader, FunctionImportMappingNonComposable mapping, Int32 resultSetIndex, EntitySet entitySet, StructuralType baseStructuralType)
+   at System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.FunctionColumnMapGenerator.System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.IColumnMapGenerator.CreateColumnMap(DbDataReader reader)
+   at System.Data.Entity.Core.EntityClient.Internal.EntityCommandDefinition.CreateColumnMap(DbDataReader storeDataReader, Int32 resultSetIndex)
+   at System.Data.Entity.Core.Objects.ObjectContext.MaterializedDataRecord[TElement](EntityCommand entityCommand, DbDataReader storeReader, Int32 resultSetIndex, ReadOnlyCollection`1 entitySets, EdmType[] edmTypes, ShaperFactory`1 shaperFactory, MergeOption mergeOption, Boolean streaming)
+   at System.Data.Entity.Core.Objects.ObjectContext.CreateFunctionObjectResult[TElement](EntityCommand entityCommand, ReadOnlyCollection`1 entitySets, EdmType[] edmTypes, ExecutionOptions executionOptions)
+   at System.Data.Entity.Core.Objects.ObjectContext.<>c__DisplayClass47`1.<ExecuteFunction>b__46()
+   at System.Data.Entity.Core.Objects.ObjectContext.ExecuteInTransaction[T](Func`1 func, IDbExecutionStrategy executionStrategy, Boolean startLocalTransaction, Boolean releaseConnectionOnSuccess)
+   at System.Data.Entity.Core.Objects.ObjectContext.<>c__DisplayClass47`1.<ExecuteFunction>b__45()
+   at System.Data.Entity.SqlServer.DefaultSqlExecutionStrategy.Execute[TResult](Func`1 operation)
+   at System.Data.Entity.Core.Objects.ObjectContext.ExecuteFunction[TElement](String functionName, ExecutionOptions executionOptions, ObjectParameter[] parameters)
+   at System.Data.Entity.Core.Objects.ObjectContext.ExecuteFunction[TElement](String functionName, MergeOption mergeOption, ObjectParameter[] parameters)
+   at System.Data.Entity.Core.Objects.ObjectContext.ExecuteFunction[TElement](String functionName, ObjectParameter[] parameters)
+   at ApprosysAccDB.AprosysAccountingEntities.Report_ItemWiseSale(Nullable`1 dtStart, Nullable`1 dtEnd) in D:\Angular\Accounting Managment\Accounting Managment\ApprosysAccDB\ApprosysAccModel.Context.cs:line 507
+   at AprosysAccounting.BussinessLogics.ReportHelper.DownloadItemWiseSales(DateTime dtStart, DateTime dtEnd) in D:\Angular\Accounting Managment\Accounting Managment\AprosysAccounting\BussinessLogics\ReportHelper.cs:line 713
+   at AprosysAccounting.Controllers.ReportController.DownloadItemWiseSales(String dtStart, String dtEnd, Nullable`1 Preview) in D:\Angular\Accounting Managment\Accounting Managment\AprosysAccounting\Controllers\ReportController.cs:line 302
+   at lambda_method(Closure , ControllerBase , Object[] )
+   at System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   at System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+Error: 
+12-11-2019 18:33:23 - ErrorLog : Error in sending email System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: value
+   at System.Net.Mail.SmtpClient.set_Port(Int32 value)
+   at AprosysAccounting.Appcode.Email.sendEmail(String _message, String Subject, String toEmailAddress, Boolean MessageIsHTML, SortedList`2 attachmentPath, String FromAddress) in D:\Angular\Accounting Managment\Accounting Managment\AprosysAccounting\Appcode\Email.cs:line 69 - 
+Error: 
+12-11-2019 18:33:23 - ErrorLog : Error in sending email System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: value
+   at System.Net.Mail.SmtpClient.set_Port(Int32 value)
+   at AprosysAccounting.Appcode.Email.sendEmail(String _message, String Subject, String toEmailAddress, Boolean MessageIsHTML, SortedList`2 attachmentPath, String FromAddress) in D:\Angular\Accounting Managment\Accounting Managment\AprosysAccounting\Appcode\Email.cs:line 106
+   at AprosysAccounting.Appcode.Email.<>c__DisplayClass4_0.<sendEmailAsync>b__0() in D:\Angular\Accounting Managment\Accounting Managment\AprosysAccounting\Appcode\Email.cs:line 118 - 
+Error: 

@@ -1,0 +1,392 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <label>Date Start</label>
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" id="dtp_sell_MainStartDate" class="form-control" readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label>Date End</label>
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" id="dtp_sell_MainEndDate" class="form-control " readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3" hidden>
+            <label>Customer</label>
+            <select class="form-control ddl_sell_MainCustomer" id="ddl_sell_MainCustomer">
+                <option value="0" disabled>--Select--</option>
+
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <br>
+            <input type="button" class="btn btn-success" id="btn_sell_Search" value="Search" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3" style="float:right">
+            <input type="button" class="btn btn-success" id="btn_sell_AddNewSales" value="Add New Sales" style="float:right" />
+        </div>
+    </div>
+
+    <br />
+
+    <table id="tblSalesInformation" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center success">Invoice</th>
+                <th class="text-center success">Date</th>
+                <th class="text-center success">Customer</th>
+                <th class="text-center success">Amount</th>
+                <th class="text-center success">Paid</th>
+                <th class="text-center success">Cash Received</th>
+                <th class="text-center success">Action</th>
+            </tr>
+        </thead>
+        <tbody class="tblactive"></tbody>
+
+    </table>
+</div>
+
+
+
+
+</div>
+
+<div class="modal fade" id="AddNewSellModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddNewSellModal" style="width:1170px">
+        <div class="modal-content col-xs-11">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Add New Sales</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Invoice #</label>
+                        <input type="text" class="form-control" id="txt_sell_InvoiceNo" value="10102222" readonly />
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Date</label>
+                        @*<div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" id="dtp_sell_ActivityDate" readonly>
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>*@
+                        <div class="input-group datetimepker">
+                            <input type="text" class="form-control datetimepker linkToDatePermission" id="dtp_sell_ActivityDate">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Sales Person</label>
+                        <select class="form-control dd_sell_sales_person" id="dd_sell_sales_person">
+                            <option value="0" selected></option>
+
+                        </select>
+                        @*<label>Customer</label>
+                            <select class="form-control ddl_sell_Customer" id="dd_sell_Customer">
+                                <option value="0" disabled>--Select--</option>
+
+                            </select>*@
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Customer</label>
+                        <select class="form-control ddl_sell_Customer" id="dd_sell_Customer">
+                            <option value="0" disabled>--Select--</option>
+
+                        </select>
+
+                    </div>
+                    <div class="col-sm-1">
+                        <label>Add</label>
+                        <input type="button" class="btn btn-success" id="btn_AddCustomer" value="+">
+
+
+                    </div>
+
+
+                    @*<div class="col-sm-3">
+                            <label class="hidden">Services</label><br />
+                            <input class="form-check-input col-sm-3 hidden" type="checkbox" id="Xchk_sell_Service" style="height:30px;">
+                        </div>*@
+
+                </div>
+                <br />
+                <div class="row" id="div_sell_Item">
+                    <div class="col-sm-2">
+                        <label>Code</label>
+                        <input type="text" class="form-control" id="txt_sell_Code" maxlength="13" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Item</label>
+                        <select class="form-control  ddl_sell_item " id="txt_sell_item">
+                            <option value="0"></option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Unit</label>
+                        <input type="text" class="form-control" id="txt_sell_Unit" readonly />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Qty</label>
+                        <input type="number" min="0" class="form-control StopPasting" oninput="validity.valid||(value='');" id="txt_sell_Qty" max="9999" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Unit Price</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_sell_Unitprice" maxlength="9" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Tax</label>
+                        <label id="lbl_sell_tax"></label>
+                        <div class="currencyInputWrap">
+                            <input type="text" disabled="disabled" class="form-control CurrencyFormatting StopPasting" id="txt_sell_tax" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="div_sell_Service">
+
+                    <div class="col-sm-2">
+                        <label>Service</label>
+                        <select class="form-control  ddl_sell_service " id="txt_sell_service">
+                            <option value="0"></option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>Unit Price</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting" id="txt_sell_service_unitprice" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Tax</label>
+                        <label id="lbl_sell_service_tax"></label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control StopPasting" disabled="disabled" id="txt_sell_service_tax" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-2">
+                        <label>Amount</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting Amount" id="txt_sell_service_Amount" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="div_sell_amount">
+
+                    <div class="col-sm-8"></div>
+                    <div class="col-sm-2">
+                        <br /> <label class="form-check-label col-sm-9" style="margin-top: 9%;font-size:16px;">Credit</label>
+                        <input class="form-check-input col-sm-3" type="checkbox" id="chk_Sale_customer_IsSalesCredit" style="height:40px;">
+
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Amount</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting Amount" id="txt_sell_Amount" readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-sm-5" style="">
+                        <div id="txt_CreditPaymentNote"></div>
+                    </div>
+                    <div class="col-sm-6" style="text-align:right">
+                        <input type="button" class="btn btn-success ClearSalescontrols" value="Clear" />
+                    </div>
+                    <div class="col-sm-1" style="text-align:right">
+                        <input type="button" class="btn btn-success AddSales" value="Add" />
+                    </div>
+                </div>
+
+                <br />
+                <table id="tblSalescurrentInformation" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center success">Code</th>
+                            <th class="text-center success">Item</th>
+                            <th class="text-center success">Unit</th>
+                            <th class="text-center success">Qty</th>
+                            <th class="text-center success">Price</th>
+                            <th class="text-center success">Tax</th>
+                            <th class="text-center success">Amount</th>
+                            <th class="text-center success">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tblCurrentSales"></tbody>
+
+                </table>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-1" style="text-align:right;padding :0px;">
+                        <label> Comments : </label>
+                    </div>
+                    <div class="col-sm-11">
+                        <input type="text" class="form-control" id="txt_sell_Comments" maxlength="250" />
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-1" style="text-align:right;padding:0px;">
+                        <label>Net Amount</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting NetAmount" id="txt_sell_NetAmount" readonly />
+                        </div>
+                    </div>
+                    <div class="col-sm-1" style="text-align:right;padding:0px;">
+                        <label>Net Tax</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting" id="txt_sell_NetTaxAmount" readonly />
+                        </div>
+                    </div>
+                    <div class="col-sm-1" style="text-align:right;padding:0px;">
+                        <label>Paid</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting paid" min="0" id="txt_sell_PaidAmount" oninput="validity.valid||(value='');" maxlength="13" />
+                        </div>
+                    </div>
+                    <div class="col-sm-1" style="text-align:right;padding:0px">
+                        <label>Balance</label>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting balance" id="txt_sell_Balance" readonly />
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="btn_sell_Save" value="Save" />
+                <a href="#" class="btn btn-default close" data-dismiss="modal">Close</a>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="NewCustomerModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog NewCustomerModal" style="width: 50%; margin-left: 22%; ">
+        <div class="modal-content col-xs-12">
+            <div class="modal-header">
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>*@
+                <h4 class="modal-title" id="title_sales_customer">Add New Customer</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <label>First Name</label>
+                        <input type="text" class="form-control txtCstFname" maxlength="50" />
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control txtCstLname" maxlength="50" />
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Sales Person</label>
+                        <select class="form-control dd_sell_new_customer_sales_person" id="dd_sell_new_customer_sales_person">
+                            <option value="0" selected></option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Phone</label>
+                        <input type="text" class="form-control txtCstPhone StopPasting" onkeypress="return NotAllowDecimalAndNegative(event)" maxlength="20" />
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Email</label>
+                        <input type="text" class="form-control txtCstEmail StopPasting" maxlength="50" />
+                    </div>
+                    <div class="col-sm-4">
+                        <label>CNIC</label>
+                        <input class="form-control StopPasting" name="txt_customer_cnic" maxlength="15" id="txt_customer_cnic" value="" placeholder="xxxxx-xxxxxxx-x">
+                    </div>
+                    <div class="col-sm-4">
+                        <label>NTN</label>
+                        <input type="text" class="form-control" id="txt_customer_ntn" maxlength="18" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="btnSaveCustomer" value="Save" />
+                <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="PrintPreviewModal" class="modal fade">
+    <div class="modal-dialog modal-lg AddNewSellModal" style="width:90vw">
+        <div class="modal-content col-xs-11">
+            <div class="modal-header">
+
+            </div>
+            <div class="modal-body" style="height:80vh">
+                <iframe id="PrintPreviewIFrame" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default btn-danger close" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+    <script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+    <script src="~/Scripts/custom/helper.js"></script>
+    <script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+    <script src="~/Theme/js/jquery.inputpicker.js"></script>
+    <script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+    <script src="~/Scripts/custom/SalesInformation.js"></script>
+    <script src="~/Scripts/custom/GenericLib.js"></script>
+    <script type="text/javascript">
+        var taxes = @Html.Raw(ViewBag.Taxes);
+        $(document).ready(function () {
+            //$("#dtp_sell_ActivityDate").val(moment(result.activitydate).format('YYYY-MM-DD'));
+            //$('#dtp_sell_ActivityDate').val(FormatDateTimeToDisplay(new Date()));
+            SalesInformation();
+        });
+    </script>
+
+

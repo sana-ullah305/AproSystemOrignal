@@ -1,0 +1,43 @@
+USE [AprosysAccounting]
+GO
+
+/****** Object:  Table [dbo].[Customer]    Script Date: 09/24/2019 14:26:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SalesPerson](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	
+	[FirstName] [nvarchar](50) NULL,
+	[LastName] [nvarchar](50) NULL,
+	[Phone] [nvarchar](50) NULL,
+	[Email] [nvarchar](50) NULL,
+	CNIC INT NULL,
+	[OpeningBalance] [decimal](10, 2) NULL,
+	[Misc] [nvarchar](256) NULL,
+	[StartDate] [datetime] NULL,
+	[CreatedOn] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedOn] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_SalesPerson] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+GO
+
+
+
+alter table SalesPerson
+drop column CNIC 
+
+alter table SalesPerson
+add CNIC NVARCHAR(20) 

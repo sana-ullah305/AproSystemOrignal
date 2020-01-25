@@ -1,0 +1,12 @@
+
+alter table Customer
+add NTN nvarchar(20)
+
+alter table Vendor
+add NTN nvarchar(20)
+
+alter table Vendor
+add CNIC nvarchar(20)
+
+alter table SalesPerson
+add NTN nvarchar(20)

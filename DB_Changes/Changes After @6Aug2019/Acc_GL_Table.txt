@@ -1,0 +1,5 @@
+alter table Acc_GL
+Add SalesPersonId INT
+
+Alter table Acc_GL
+Add DocumentId NVARCHAR(50)

@@ -1,0 +1,60 @@
+﻿
+
+<div class="container" style="margin-top:20px">
+    <div style="margin-top:80px">
+
+        <div class="row">
+            <div class="col-sm-1 text-right">
+                <label>Start</label>
+            </div>
+            <div class="col-sm-3">
+
+                <div class="input-group date " data-provide="datepicker">
+                    <input type="text" id="dtp_trialbalance_MainStartDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1 text-right">
+                <label>End</label>
+            </div>
+            <div class="col-sm-3">
+
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtp_trialbalance_MainEndDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <input type="button" class="btn btn-success" id="btn_trialbalance_Search" value="Get Trial Balance" />
+            </div>
+        </div>
+
+        <table id="tbltialbalance" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center success">Account</th>
+                    <th class="text-center success">Debit</th>
+                    <th class="text-center success">Credit</th>
+                    
+                </tr>
+            </thead>
+            <tbody class="tblactive"></tbody>
+
+        </table>
+    </div>
+</div>
+
+
+<script src="~/Scripts/custom/Report.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        ReportsTrigger();
+    });
+</script>

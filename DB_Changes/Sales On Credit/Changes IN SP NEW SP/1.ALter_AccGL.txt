@@ -1,0 +1,8 @@
+/*====Add Columns in AccGL===== When IsSalesCredit is True then CreditPaidDate will be Null and Vice Versa */
+ALTER TABLE Acc_GL
+ADD IsSalesCredit BIT
+
+
+
+ALTER TABLE Acc_GL
+ADD CreditPaidDate DATETIME

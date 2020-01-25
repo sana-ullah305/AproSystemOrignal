@@ -1,0 +1,275 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+<link href="~/css/plugins/chosen/chosen.css" rel="stylesheet" />
+
+<div class="container" style="margin-top:20px">
+
+
+    <div style="margin-top:80px">
+
+        <div class="row">
+            <div class="col-sm-3">
+                <label>Date Start</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtp_pvoucher_MainStartDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <label>Date End</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtp_pvoucher_MainEndDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <br />
+                <input type="button" class="btn btn-success" id="btn_pvoucher_Search" value="Search">
+                <input type="button" class="btn btn-success" id="btn_pvoucher_Download" value="Download">
+                @*<label>InvoiceNo</label>
+                    <select class="form-control ddl_pvoucher_MainCustomer" id="ddl_pvoucher_MainCustomer">
+                        <option value="0" disabled>--Select--</option>
+
+                    </select>*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3" style="float:right">
+                <input type="button" class="btn btn-success" id="btn_pvoucher_AddNewPayment" value="Add New Payment" style="float:right" />
+            </div>
+        </div>
+
+        <br />
+
+        <table id="tblPaymentInformation" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center success">Invoice</th>
+                    <th class="text-center success">Date</th>
+                    <th class="text-center success">HeadType</th>
+                    <th class="text-center success">Name</th>
+                    <th class="text-center success">RecAmount</th>
+
+                    <th class="text-center success">Action</th>
+                </tr>
+            </thead>
+            <tbody class="tblactive"></tbody>
+
+        </table>
+    </div>
+
+
+
+
+</div>
+
+<div class="modal fade" id="AddNewPaymentVoucherModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddNewPaymentVoucherModal" style="width:1170px">
+        <div class="modal-content col-xs-11">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Add New Payment Voucher</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Invoice No</label>
+                        <input type="text" class="form-control" id="txt_pvoucher_InvoiceNo" readonly />
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Date</label>
+                        @*<div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" id="dtp_pvoucher_ActivityDate" readonly>
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>*@
+
+                        <div class="input-group datetimepker">
+                            <input type="text" class="form-control datetimepker linkToDatePermission" id="dtp_pvoucher_ActivityDate" readonly>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Type</label>
+                        <select class="form-control ddl_pvoucher_ExpenseType" id="ddl_pvoucher_ExpenseType">
+                            <option value="0" disabled>--Select--</option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label id="lbl_pvoucher_Expense">Expense</label>
+                        <select class="form-control ddl_pvoucher_Expense" id="ddl_pvoucher_Expense">
+                            <option value="0" disabled>--Select--</option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-1" id="div_payment_AddExpensebutton">
+                        <label>Add</label>
+                        <input type="button" class="btn btn-success" id="btn_pvoucher_AddExpenseType" value="+" />
+                        @*<input type="button" class="btn btn-success" id="btn_pvoucher_deleteExpense" value="-" />*@
+
+                    </div>
+                </div>
+                <br /> <br />
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Paid</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_pvoucher_Paid" maxlength="8" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Payment Mode</label>
+                        <div class="">
+                            <select id="ddl_PaymentVoucher_PaymentMode" class="ddlPaymentMode form-control">
+                                <option value="1">Cash</option>
+                                <option value="2">Cheque</option>
+                                <option value="3">Bank Transfer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 bankTransfer_hideShow" style="display:none;">
+                        <label>Bank Account</label>
+                        <div>
+                            <select id="ddl_PaymentVoucher_BankTransfer" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 hide_showBank">
+                        <label>Bank</label>
+                        <div>
+                            <select id="ddl_PaymentVoucher_Bank" class="form-control"></select>
+                        </div>
+                    </div>
+                    @*<div class="col-sm-3 bankTransfer_hideShow"></div>*@
+                    <div class="col-sm-2 bankTransfer_hideShow" style="display:none;"><label></label><div></div></div>
+                        <div class="col-sm-2 hide_showBank">
+                            <label>Cheque#</label>
+                            <div>
+                                <input id="txt_PaymentVoucher_DocNum" type="text" class="form-control inpDocNumber " />
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label id="lbl_pvoucher_balance">Balance</label>
+                            <div class="currencyInputWrap">
+                                <input type="text" class="form-control CurrencyFormatting StopPasting" id="txt_pvoucher_Balance" readonly />
+                            </div>
+                        </div>
+                        <div class="col-sm-3" id="show_hide_0">
+                            <label>Gross Amount</label>
+                            <div class="currencyInputWrap">
+                                <input type="text" class="form-control CurrencyFormatting StopPasting txt_pvoucher_GrossAmount" id="txt_pvoucher_GrossAmount" readonly />
+                            </div>
+
+                        </div>
+                    </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Comments</label>
+                        <input type="text" class="form-control" id="txt_pvoucher_Comments" maxlength="250" />
+                    </div>
+                    @*<div class="col-sm-3"></div>
+                    <div class="col-sm-3"></div>*@
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-3" id="show_hide_1" style="display:none;">
+                        <label>Gross Amount</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting txt_pvoucher_GrossAmount" id="txt_pvoucher_GrossAmount" readonly />
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                @*<br />*@
+                @*<div class="row">
+                    <div class="col-sm-6">
+                        <label>Comments</label>
+                        <input type="text" class="form-control" id="txt_pvoucher_Comments" maxlength="250" />
+                    </div>
+                </div>*@
+                <br />
+                @*<div class="row">
+                        <div class="col-sm-3" style="text-align:right;float:right">
+                            <input type="button" class="btn btn-success" id="btn_pvoucher_Save" value="Save" />
+                        </div>
+                    </div>*@
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="btn_pvoucher_Save" value="Save" />
+                <a href="#" class="btn btn-default close" data-dismiss="modal">Close</a>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="AddNewAdministrativeModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddNewAdministrativeModal" id="mdl_addExpense" style="width:500px">
+        <div class="modal-content col-xs-11">
+            <div class="modal-header h5" id="div_payment_AddNewExpense">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Add New Administrative Expense</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+
+                    <div class="col-sm-4">  <label>Expense Name</label></div>
+                    <div class="col-sm-8"><input type="text" class="form-control" id="txt_pvoucher_AdministrativeExpense" maxlength="50" /></div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="btn_pvoucher_SaveExpense" value="Save" />
+                <a href="#" class="btn btn-default" data-dismiss="modal" id="btn_pvoucher_closeExpense">Close</a>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+<script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+<script src="~/Theme/js/jquery.inputpicker.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script src="~/js/plugins/chosen/chosen.jquery.js"></script>
+<script src="~/Scripts/custom/PaymentVoucher.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        PaymentVoucherTrigger();
+    });
+
+
+
+
+</script>
+
+

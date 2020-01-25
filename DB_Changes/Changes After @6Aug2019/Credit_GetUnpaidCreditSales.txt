@@ -1,0 +1,25 @@
+USE [TotalDistribution]
+GO
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnpaidCreditSales]    Script Date: 24/09/2019 7:25:12 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ALTER Procedure [dbo].[Credit_GetUnpaidCreditSales]
+@ActivityStartDate DATETIME,
+@ActivityEndDate DATETIME
+
+AS
+
+BEGIN
+
+SELECT InvoiceNo ,C.Id CustId,C.LastName+' '+C.FirstName CustomerName,ActivityTimestamp SalesDate,Debit  Amount FROM Acc_GL GL 
+INNER Join Customer C ON GL.CustId=C.Id WHERE 
+GL.[TranTypeId] = 2 AND CoaId=10 AND GL.IsActive=1
+AND Gl.ActivityTimestamp>@ActivityStartDate AND Gl.ActivityTimestamp < @ActivityEndDate
+
+END
+
+

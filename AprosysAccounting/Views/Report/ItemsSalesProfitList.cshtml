@@ -1,0 +1,51 @@
+﻿
+
+<div style="margin-top:80px">
+
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3">
+            <label class="col-sm-5">Start</label>
+            <div class="input-group date " data-provide="datepicker">
+                <input type="text" id="dtp_itemSalesProfitList_MainStartDate" class="form-control" readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label class="col-sm-5">End</label>
+            <div class="input-group date " data-provide="datepicker">
+                <input type="text" id="dtp_itemSalesProfitList_MainEndDate" class="form-control" readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <input type="button" class="btn btn-success" id="btn_itemSalesProfitList_View" value="VIEW" />
+            <input type="button" class="btn btn-success" id="btn_itemSalesProfitList_Search" value="DOWNLOAD" />
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <iframe id="ReportPreview" src="" style="height:75vh;width:100%" frameborder="0"></iframe>
+        </div>
+    </div>
+
+</div>
+<script src="~/Scripts/custom/Report.js"></script>
+
+
+
+<script type="text/javascript">
+    $("#dtp_itemSalesProfitList_MainStartDate").val(moment().subtract('days', 7).format('YYYY-MM-DD'));
+    $("#dtp_itemSalesProfitList_MainEndDate").val(moment().format('YYYY-MM-DD'));
+    $(document).ready(function () {
+        ReportsTrigger();
+    });
+</script>
+
+

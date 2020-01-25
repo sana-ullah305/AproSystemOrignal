@@ -1,0 +1,24 @@
+Update [AprosysAccounting].[dbo].[Acc_GL]  Set IsActive=0 where GLID in (91,92,93);
+Update [AprosysAccounting].[dbo].[Acc_GL]  Set IsActive=0 where GLID in (94,95,96);
+
+/*31*/
+Update [AprosysAccounting].[dbo].[Acc_GL]  Set IsActive=0 where GLID in (94,95,96)
+
+/*38*/
+Update [AprosysAccounting].[dbo].[Acc_GL]  Set IsActive=0 where GLID in (118,119,120)
+/*55*/
+Update [AprosysAccounting].[dbo].[Acc_GL]  Set IsActive=0 where GLID in (169,170,171);
+
+/*57*/
+Update [AprosysAccounting].[dbo].[Acc_GL]  Set IsActive=0 where GLID in (175,176,177)
+
+/*83*/
+Update [AprosysAccounting].[dbo].[Acc_GL]  Set IsActive=0 where GLID in (187,188,189)
+
+
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+Update [AprosysAccounting].[dbo].[Acc_GL] Set Isactive=0  where InvoiceNo='BT-13';
+
+  
+  

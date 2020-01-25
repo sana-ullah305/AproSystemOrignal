@@ -1,0 +1,85 @@
+﻿
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+<div class="container" id="purchaseListReportDiv" style="margin-top:20px">
+    <h3>Purchase List</h3>
+    <div style="margin-top:80px">
+
+        <div class="row">
+            <div class="col-sm-1 text-right">
+                <label>Start</label>
+            </div>
+            <div class="col-sm-2">
+
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtpi_MainStartDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="col-sm-1 text-right">
+                <label>End</label>
+            </div>
+            <div class="col-sm-2">
+
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtpi_MainEndDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1 text-right">
+                <label>Vendor</label>
+            </div>
+            <div class="col-sm-2">
+                <select id="ddlVendor" class="form-control"></select>
+            </div>
+            <div class="col-sm-1 text-right">
+                <label>Item</label>
+            </div>
+            <div class="col-sm-2">
+                <select id="ddlItem" class="form-control"></select>
+            </div>
+
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm-9"></div>
+            <div class="col-sm-3">
+                <input type="button" class="btn btn-success" id="btn_PurchaseList_View" value="VIEW" />
+                <input type="button" class="btn btn-success" id="btn_PurchaseList_Search" value="DOWNLOAD" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <iframe id="ReportPreview" src="" style="height:75vh;width:100%" frameborder="0"></iframe>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/Scripts/custom/Report.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#dtpi_MainStartDate").val(moment().subtract('days', 7).format('YYYY-MM-DD'));
+        $("#dtpi_MainEndDate").val(moment().format('YYYY-MM-DD'));
+        ReportsTrigger();
+        GetVendors($('#ddlVendor'));
+        GetItems($('#ddlItem'));
+    });
+</script>

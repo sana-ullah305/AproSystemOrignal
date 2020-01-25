@@ -1,0 +1,660 @@
+GO
+/****** Object:  StoredProcedure [dbo].[Report_GetSaleInvoice]    Script Date: 10/09/2019 16:25:38 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[Report_GetSaleInvoice]
+(
+	@voucherNo NVARCHAR(50)
+)
+AS
+BEGIN
+
+SELECT
+	GL.[InvoiceNo],
+	ITEM.[ItemCode],ITEM.[Name], ITEM.[Unit],
+	GL.[ItemId],GL.[Quantity],GL.[UnitPrice], GL.[Credit]+GL.[TaxPercent] AS AMOUNT,'' AS COMMENTS,GL.[ActivityTimestamp] AS ACTTIMESTAMP,
+	'ITEMS' AS TYPED, '' AS SERVICETYPE,
+	0 AS CoaId,
+	0 AS BALANCE,
+	0 AS PAID,
+	ISNULL(GL.[TaxPercent],0) AS TAX,
+	CST.[FirstName] + ' '+ CST.[LastName] AS CSTNAME, CST.Id AS cstID, CST.Phone,GL.[IsSalesCredit],GL.CreditPaidDate
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Item] AS ITEM ON ITEM.[Id] = GL.[ItemId]
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+WHERE
+	GL.[IsActive] = 1 AND GL.TranTypeId = 2 AND GL.[CoaId] = 14
+	AND ('' = @voucherNo OR GL.[InvoiceNo] = @voucherNo)
+	
+	UNION
+
+SELECT
+	GL.[InvoiceNo],	
+	COA.ServiceCode AS ItemCode,'' AS Name,'' AS Unit,
+	 0 AS ItemId,GL.[Quantity] AS Quantity,GL.[UnitPrice] AS UnitPrice, ISNULL(GL.[Credit],0)+ISNULL(GL.[TaxPercent],0) AS AMOUNT,'' AS COMMENTS,GL.[ActivityTimestamp] AS ACTTIMESTAMP,
+	'SERVICES' AS TYPED, COA.[TreeName] AS SERVICETYPE,
+	GL.[CoaId],
+	0 AS BALANCE,
+	0 AS PAID,
+	ISNULL(GL.[TaxPercent],0) AS TAX,
+	CST.[FirstName] + ' '+ CST.[LastName] AS CSTNAME, CST.Id AS cstID, CST.Phone,GL.[IsSalesCredit],GL.CreditPaidDate
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Acc_COA] AS COA ON COA.[CoaId] = GL.[CoaId] AND COA.IsActive = 1 AND COA.[HeadAccount] = 5
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+WHERE
+	GL.[IsActive] = 1 AND GL.TranTypeId = 2 AND GL.[IsPostpaid] = 1
+	AND ('' = @voucherNo OR GL.[InvoiceNo] = @voucherNo)
+
+	UNION
+
+SELECT 
+	TAB1.[InvoiceNo], '' AS ItemCode,'' AS Name,'' AS Unit, 0 AS ItemId, 0 AS Quantity, 0 AS UnitPrice, 
+	SUM(AMOUNT) AS AMOUNT,
+	MAX(TAB1.COMMENTS),MIN(TAB1.ACTTIMESTAMP),
+	'TOTALS' AS TYPED, 
+	'' AS SERVICETYPE, 0 AS CoaId,
+	SUM(BALANCE) AS BALANCE,
+	SUM(PAID) AS PAID,
+	SUM(ISNULL(TAX,0)) AS TAX,
+	TAB1.CSTNAME, TAB1.Id AS cstID, MAX(TAB1.Phone),SUM(CAST(TAB1.IsSalesCredit AS INT))/*IsSalesCredit=0 then sum will be 0 always,means fully Paid,otherwise onCredit*/
+	,MAX(TAB1.CreditPaidDate)
+FROM(
+
+SELECT
+	GL.[InvoiceNo],
+	CASE WHEN GL.[CoaId] = 0 THEN GL.[Credit] ELSE 0 END AS AMOUNT, 
+	CASE WHEN GL.[CoaId] = 0 THEN GL.[Comments] ELSE NULL END AS COMMENTS,
+	GL.[ActivityTimestamp] AS ACTTIMESTAMP, 
+	'TOTALS' AS TYPED, 
+	CASE WHEN GL.[CoaId] = 10 THEN GL.[Debit] ELSE 0 END AS BALANCE,
+	CASE WHEN GL.[CoaId] = 11 THEN GL.[Debit] ELSE 0 END AS PAID,
+	CASE WHEN GL.[CoaId] = 99 THEN ISNULL(GL.[Credit],0) ELSE 0 END AS TAX,
+	CST.[FirstName] + ' '+ CST.[LastName] AS CSTNAME, CST.Id, CST.Phone,GL.IsSalesCredit,GL.CreditPaidDate
+
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+WHERE
+	GL.[IsActive] = 1 AND GL.TranTypeId = 2 AND GL.[ItemId] IS NULL
+	AND ('' = @voucherNo OR GL.[InvoiceNo] = @voucherNo)
+) AS TAB1
+GROUP BY
+TAB1.[InvoiceNo],TAB1.CSTNAME, TAB1.Id
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[Report_GetPurchaseInvoice]    Script Date: 10/09/2019 16:24:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[Report_GetPurchaseInvoice]
+(
+	@voucherNo NVARCHAR(50)
+)
+AS
+BEGIN
+
+SELECT
+	GL.[InvoiceNo],
+	ITEM.[ItemCode],ITEM.[Name], ITEM.[Unit],
+	GL.[ItemId],GL.[Quantity],GL.[UnitPrice], GL.[Debit] AS AMOUNT,'' AS COMMENTS,GETDATE() AS ACTTIMESTAMP,
+	'ITEMS' AS TYPED, 
+	0 AS BALANCE,
+	0 AS PAID,
+	'' AS VENDNAME, 0 AS vendID
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Item] AS ITEM ON ITEM.[Id] = GL.[ItemId]
+WHERE
+	GL.[IsActive] = 1 AND GL.TranTypeId = 1 AND GL.[CoaId] = 6
+	AND ('' = @voucherNo OR GL.[InvoiceNo] = @voucherNo)
+	
+	UNION
+
+SELECT 
+	TAB1.[InvoiceNo], 
+	'' AS ItemCode,'' AS Name,'' AS Unit, 
+	0 AS ItemId, 0 AS Quantity, 0 AS UnitPrice, SUM(AMOUNT) AS AMOUNT,MAX(TAB1.COMMENTS),MIN(TAB1.ACTTIMESTAMP) AS ACTTIMESTAMP,
+	'TOTALS' AS TYPED,
+	SUM(BALANCE) AS BALANCE,
+	SUM(PAID) AS PAID,
+	TAB1.VENDNAME, TAB1.Id AS vendID
+FROM(
+
+SELECT
+	GL.[InvoiceNo],
+	CASE WHEN GL.[CoaId] = 0 THEN GL.[Credit] ELSE 0 END AS AMOUNT, 
+	CASE WHEN GL.[CoaId] = 0 THEN GL.[Comments] ELSE NULL END AS COMMENTS,
+	GL.[ActivityTimestamp] AS ACTTIMESTAMP, 
+	'TOTALS' AS TYPED, 
+	CASE WHEN GL.[CoaId] = 12 THEN GL.[Credit] ELSE 0 END AS BALANCE,
+	CASE WHEN GL.[CoaId] = 11 THEN GL.[Credit] ELSE 0 END AS PAID,
+	VEND.[FirstName] + ' '+ VEND.[LastName] AS VENDNAME, VEND.[ID]
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Vendor] AS VEND ON VEND.[ID] = GL.[VendorId]
+WHERE
+	GL.[IsActive] = 1 AND GL.TranTypeId = 1 AND GL.[ItemId] IS NULL
+	AND ('' = @voucherNo OR GL.[InvoiceNo] = @voucherNo)
+) AS TAB1
+GROUP BY
+TAB1.[InvoiceNo],TAB1.VENDNAME, TAB1.Id
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[Report_AccountsReceivable]    Script Date: 10/09/2019 16:22:36 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[Report_AccountsReceivable]
+(
+	@custID int,
+	@typeID int
+)
+AS
+BEGIN
+--ISNULL(SUM(CAST(IsSalesCredit AS TINYINT)),0)>0 THEN 
+IF(@typeID=1)
+	BEGIN
+	SELECT
+		 SUM(ISNULL(GL.[Debit],0))-SUM(ISNULL(GL.[Credit],0))  AS AMOUNT,
+		CST.[FirstName] + ' '+ CST.[LastName] AS VENDOR,
+		CASE WHEN CST.[TypeId] = 1 THEN 'Receivables' ELSE 'Subscription' END AS TYPED,GL.InvoiceNo,min(GL.ActivityTimestamp) as ActivityTimestamp
+	FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] AND (@typeID = 0 OR CST.[TypeId] = @typeID)
+	WHERE
+	GL.[IsActive] = 1 AND GL.CoaId = 10 
+	
+	AND (@custID = 0 OR GL.[CustId] = @custID)
+	GROUP BY
+	CST.[FirstName], CST.[LastName], CST.[TypeId],Gl.InvoiceNo
+	END
+
+ELSE
+	BEGIN 
+	SELECT
+		SUM(ISNULL(GL.[Debit],0))-SUM(ISNULL(GL.[Credit],0)) AS AMOUNT,
+		CST.[FirstName] + ' '+ CST.[LastName] AS VENDOR,
+		'Subscription' AS TYPED,max(GL.InvoiceNo) as InvoiceNo,max(GL.ActivityTimestamp) as ActivityTimestamp
+	FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]  AND GL.IsActive =1 AND CST.IsActive =1
+	INNER JOIN [Subscription] AS SUBS ON SUBS.CustId=CST.Id AND SUBS.IsActive=1
+
+	WHERE
+	GL.[IsActive] = 1 AND ([CoaId] =10 OR (CoaId=100 AND InvoiceNo LIKE '%RCT%')) 
+	AND (@custID = 0 OR GL.[CustId] = @custID)
+	GROUP BY
+	CST.[FirstName], CST.[LastName]
+	END
+
+END
+
+--ELSE
+--BEGIN 
+--SELECT
+--	SUM(ISNULL(GL.[Debit],0))-SUM(ISNULL(GL.[Credit],0)) AS AMOUNT,
+--	CST.[LastName] + ' '+ CST.[FirstName] AS VENDOR,
+--	'Subscription'  AS TYPED
+--FROM
+--[Acc_GL] AS GL
+--INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] --AND (@typeID = 0 OR CST.[TypeId] = @typeID)
+--WHERE
+--GL.[IsActive] = 1 AND GL.CoaId = 10
+--AND (@custID = 0 OR GL.[CustId] = @custID)
+--GROUP BY
+--CST.[LastName], CST.[FirstName]--, CST.[TypeId]
+--END
+
+--END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[Report_AccountsPayable]    Script Date: 10/09/2019 16:22:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[Report_AccountsPayable]
+(
+	@vendorID int
+)
+AS
+BEGIN
+
+SELECT
+	SUM(ISNULL(GL.[Credit],0))-SUM(ISNULL(GL.[Debit],0)) AS AMOUNT,
+	VEND.[FirstName] + ' '+ VEND.[LastName] AS VENDOR
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Vendor] AS VEND ON VEND.[ID] = GL.[VendorId]
+WHERE
+	GL.[IsActive] = 1 AND GL.CoaId = 12
+	AND (@vendorID = 0 OR GL.[VendorId] = @vendorID)
+GROUP BY
+	VEND.[LastName], VEND.[FirstName]
+
+
+END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[GetSubscriptionVoucherList]    Script Date: 10/09/2019 16:20:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetSubscriptionVoucherList]
+@voucherNo NVARCHAR(50),
+@ActivityStartDate DATETIME,
+@ActivityEndDate DATETIME
+AS
+BEGIN
+
+SELECT
+	GL.[Debit] AS Amount, CST.[FirstName] + ' '+ CST.[LastName] AS Customer, GL.[ActivityTimestamp],GL.[InvoiceNo],CST.Id CustId,GL.Comments,SUBS.SubscriptionAmount--,CAST( Replace(InvoiceNo ,'RCT-','' ) AS INT) sort --CST.Misc
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]  AND GL.IsActive =1 AND CST.IsActive =1
+	INNER JOIN [Subscription] AS SUBS ON SUBS.CustId=CST.Id AND SUBS.IsActive=1
+WHERE
+	(GL.[CoaId] = 0 AND GL.[TranTypeId] = 3)--AND (@voucherNo = '' OR GL.[InvoiceNo] = @voucherNo)
+	AND GL.ActivityTimestamp >=@ActivityStartDate AND GL.ActivityTimestamp <=@ActivityEndDate
+	order by CAST( Replace(InvoiceNo ,'RCT-','' ) AS INT) desc
+END
+
+
+
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[GetSubscriptionByVoucherNo]    Script Date: 10/09/2019 16:20:08 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetSubscriptionByVoucherNo]
+@voucherNo NVARCHAR(50)
+AS
+BEGIN
+
+SELECT
+	GL.[Debit] AS Amount, CST.[FirstName] + ' '+ CST.[LastName] AS Customer, GL.[ActivityTimestamp],GL.[InvoiceNo],CST.Id CustId,GL.Comments,SUBS.SubscriptionAmount --CST.Misc
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]  AND GL.IsActive =1
+	INNER JOIN [Subscription] AS SUBS ON SUBS.CustId=CST.Id AND SUBS.IsActive=1
+WHERE
+	GL.[CoaId] = 0 AND GL.[TranTypeId] = 3 AND GL.[InvoiceNo] = @voucherNo
+	
+END
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[GetSaleInvoiceList]    Script Date: 10/09/2019 16:19:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetSaleInvoiceList]
+@startDate datetime=null,
+@endDate datetime=null
+AS
+BEGIN
+IF(@startDate =null)BEGIN SET @startDate=dateadd(dd,-7,GETDATE ()) END
+IF(@endDate=null)BEGIN SET @endDate=GETDATE() END
+
+SELECT
+	TABDEFAULT.InvoiceNo,TABDEFAULT.ActivityTimestamp,TABDEFAULT.cstName, TABDEFAULT.isCustomerActive, ISNULL(PAID.PAIDAMOUNT,0)+ISNULL(REC.RECAMOUNT,0) AS NETAMOUNT,ISNULL(PAID.PAIDAMOUNT,0) AS PAID,(ISNULL(PAIDAMOUNT,0)+ISNULL(REC.RECAMOUNT,0))-ISNULL(PAID.PAIDAMOUNT,0) AS BAL,
+	CASE WHEN DELETABLE.[InvoiceNo] IS NULL THEN 1 ELSE 0 END AS IsDeletable,IsSalesCredit,TABDEFAULT.CreditPaidDate
+FROM (
+
+SELECT
+	GL.[InvoiceNo],CST.[FirstName]+' '+CST.[LastName] AS cstName ,GL.[ActivityTimestamp], CST.[IsActive] AS isCustomerActive,IsSalesCredit ,CreditPaidDate
+FROM 
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+WHERE
+	GL.[tranTypeId] = 2 AND GL.[CoaId] = 0 AND GL.IsActive=1
+) 
+AS TABDEFAULT
+LEFT JOIN
+(
+SELECT
+ GL.[InvoiceNo],SUM(GL.[Debit]) AS PAIDAMOUNT
+FROM 
+ [Acc_GL] AS GL
+WHERE
+ GL.[tranTypeId] = 2 AND GL.[CoaId] IN(11) AND GL.IsActive=1
+GROUP BY
+ GL.[InvoiceNo]
+)
+ AS PAID
+ON PAID.InvoiceNo = TABDEFAULT.InvoiceNo
+LEFT JOIN
+(
+SELECT
+ GL.[InvoiceNo],SUM(GL.[Debit]) AS RECAMOUNT
+FROM 
+ [Acc_GL] AS GL
+WHERE
+ GL.[tranTypeId] = 2 AND GL.[CoaId] IN(10) AND GL.IsActive=1
+GROUP BY
+ GL.[InvoiceNo]
+) 
+AS REC
+ON REC.InvoiceNo = TABDEFAULT.InvoiceNo 
+LEFT JOIN
+(
+SELECT
+	GL.[InvoiceNo]
+FROM 
+	[Acc_GL] AS GL
+WHERE
+	GL.[tranTypeId] = 2 AND GL.[CoaId] IN(7) AND Gl.Quantity != GL.QuantityBalance AND GL.IsActive=1
+)
+AS DELETABLE
+ON DELETABLE.InvoiceNo = TABDEFAULT.InvoiceNo
+WHERE
+(TABDEFAULT.CreditPaidDate is NOT NULL AND TABDEFAULT.CreditPaidDate >= @startDate AND TABDEFAULT.CreditPaidDate <= @endDate)
+OR	( TABDEFAULT.CreditPaidDate is NULL AND TABDEFAULT.ActivityTimestamp >= @startDate AND TABDEFAULT.ActivityTimestamp <= @endDate)
+END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[GetReceiptVoucherListByVoucherNO]    Script Date: 10/09/2019 16:18:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetReceiptVoucherListByVoucherNO]
+(
+	@voucherNo NVARCHAR(50),
+	@typeID int
+	
+)
+AS
+BEGIN
+
+SELECT
+	GL.[Debit] AS Amount, CST.[FirstName] + ' '+ CST.[LastName]  AS Customer,CST.Phone, GL.[ActivityTimestamp],GL.[InvoiceNo],CST.Id AS CustId,
+	GL.[Comments],USR.[FirstName] +' '+USR.LastName AS SalePerson,
+	CASE WHEN CST.[TypeId] =1 THEN 'Receivable Amount' ELSE 'Subscription Amount' END AS TYPED,GL.IsSalesCredit
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] --AND (0 = @typeID OR CST.TypeId = @typeID)
+	LEFT OUTER JOIN [User] AS USR ON USR.[Id] = GL.[UserId]
+WHERE
+	(GL.[CoaId] = 0 AND GL.[TranTypeId] = 3) AND (@voucherNo = '' OR GL.[InvoiceNo] = @voucherNo)
+	
+
+END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[GetReceiptVoucherList]    Script Date: 10/09/2019 16:17:15 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetReceiptVoucherList]
+(
+	@voucherNo NVARCHAR(50),
+	@typeID int,
+	@dtStart datetime=null,
+	@dtEnd datetime=null
+)
+AS
+BEGIN
+IF(@dtStart =null)BEGIN SET @dtStart=dateadd(dd,-365,GETDATE ()) END
+IF(@dtEnd=null)BEGIN SET @dtEnd=GETDATE() END
+SELECT
+	GL.[Debit] AS Amount, CST.[FirstName] + ' '+ CST.[LastName]  AS Customer, GL.[ActivityTimestamp],GL.[InvoiceNo],CST.Id AS CustId,
+	GL.[Comments],USR.[FirstName] +' '+USR.[LastName] AS SalePerson,
+	CASE WHEN CST.[TypeId] =1 THEN 'Receivable Amount' ELSE 'Subscription Amount' END AS TYPED
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] AND (0 = @typeID OR CST.TypeId = @typeID)
+	LEFT OUTER JOIN [User] AS USR ON USR.[Id] = GL.[UserId]
+WHERE
+	(GL.[CoaId] = 0 AND GL.[TranTypeId] = 3) AND (@voucherNo = '' OR GL.[InvoiceNo] = @voucherNo)
+	AND (GL.ActivityTimestamp >= @dtStart AND GL.ActivityTimestamp <= @dtEnd) AND GL.IsActive=1
+
+END
+
+
+Go
+
+GO
+/****** Object:  StoredProcedure [dbo].[GetDailyCashFlow]    Script Date: 10/09/2019 16:13:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetDailyCashFlow]
+(
+	@date datetime
+)
+AS
+BEGIN
+CREATE TABLE #Acc_GL([TranTypeId] int,[CoaId] int,[UserId] INT,[VendorId] int,[CustId] int,[ItemId] int,[UnitPrice] decimal(10,2),[Quantity] decimal(10,2),[TaxPercent] decimal(10,2),[IsGift] bit,[Credit] decimal(10, 2) ,[Debit] decimal(10,2) ,[ActivityTimestamp] datetime,[IsPostpaid] bit,[IsSalesCredit] bit,[CreditPaidDate] datetime)
+	     	INSERT INTO #Acc_GL
+	  --   	SELECT TranTypeId ,CoaId,UserId,VendorId ,CustId,ItemId ,UnitPrice ,Quantity,TaxPercent ,IsGift ,Credit ,Debit,ActivityTimestamp ,IsPostpaid,IsSalesCredit,CreditPaidDate  FROM Acc_GL 
+			--WHERE IsActive=1 AND Acc_GL.ActivityTimestamp > CONVERT(Date,@date) AND Acc_GL.ActivityTimestamp<DATEADD(HH,24,@date)--AND CONVERT(Date,Acc_GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+			--OR (Acc_GL.IsSalesCredit=1 AND Acc_GL.CreditPaidDate > CONVERT(Date,@Date) AND Acc_GL.CreditPaidDate<DATEADD(HH,24,@date))
+			SELECT TranTypeId ,CoaId,UserId,VendorId ,CustId,ItemId ,UnitPrice ,Quantity,TaxPercent ,IsGift ,Credit ,Debit,ActivityTimestamp ,IsPostpaid,IsSalesCredit,CreditPaidDate  FROM Acc_GL 
+			WHERE IsActive=1 AND (Acc_GL.ActivityTimestamp > CONVERT(Date,@date) AND Acc_GL.ActivityTimestamp<DATEADD(HH,24,@date)--AND CONVERT(Date,Acc_GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+			AND Acc_GL.CreditPaidDate is null)
+			OR (Acc_GL.IsActive=1 AND Acc_GL.IsSalesCredit=0 AND Acc_GL.CreditPaidDate > CONVERT(Date,@Date) AND Acc_GL.CreditPaidDate<DATEADD(HH,24,@date))
+
+CREATE TABLE #temp (TypeName varchar(50),ID int ,Name varchar(50),Quantity decimal(10,2),UnitPrice decimal(10,2),AMOUNT decimal(10,2),TAX decimal(10,2),TYPEID INT , GROUPID INT)
+
+BEGIN
+INSERT INTO #temp 
+
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'OPENING' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	0 AS ID, DATENAME(dw,@date) AS NAME , 0 AS Quantity, 0 AS UnitPrice, ISNULL(TAB.AMOUNT,0) AS AMOUNT, 0 AS TAX, 0 AS TYPEID, 0 AS GROUPID
+FROM
+(SELECT SUM(ISNULL(GL.[Debit],0)) - SUM(ISNULL(GL.[Credit],0)) AS AMOUNT, 'OPENING' AS TYPENAME FROM [Acc_GL] AS GL
+WHERE 
+	GL.[CoaId] = 11 AND GL.[isactive] = 1  AND GL.[ActivityTimestamp] < CONVERT(Date,@date) 
+	) AS TAB
+GROUP BY TAB.[TYPENAME],TAB.AMOUNT
+END
+
+
+
+INSERT INTO #temp 
+SELECT 
+	--CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'Sales' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	'Sales' AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , ISNULL(TAB.[Quantity],0) AS Quantity, ISNULL(TAB.[UnitPrice],0) AS UnitPrice, ISNULL(TAB.AMOUNT,0) AS AMOUNT, ISNULL(TAB.[TAX] ,0)AS TAX, 1 AS TYPEID, 1 AS GROUPID
+	FROM
+	(SELECT GL.[ItemId] AS [ID], IT.[Name] AS [NAME], GL.[Quantity], GL.[UnitPrice], GL.[Credit]+GL.[TaxPercent] AS AMOUNT, GL.[TaxPercent] AS TAX, 'Sales' AS TYPENAME
+	FROM #Acc_GL AS GL INNER JOIN [Item] AS IT ON IT.[Id] = GL.[ItemId]
+	WHERE
+	GL.[CoaId] = 14 AND GL.[TranTypeId] = 2  AND GL.[ItemId] IS NOT NULL AND (IsSalesCredit=0 OR (IsSalesCredit=1 AND CreditPaidDate=@date))
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	--GROUP BY
+	--TAB.[ID],TAB.[NAME],TAB.[AMOUNT],TAB.[TYPENAME],TAB.[Quantity],TAB.[UnitPrice],TAB.[TAX]
+
+INSERT INTO #temp 	
+SELECT 
+	--CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'Shop' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	'Shop' AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , ISNULL(TAB.[Quantity],0) AS Quantity, ISNULL(TAB.[UnitPrice],0) AS UnitPrice, ISNULL(TAB.AMOUNT,0) AS AMOUNT, ISNULL(TAB.[TAX] ,0)AS TAX, 3 AS TYPEID, 1 AS GROUPID
+	FROM 
+	(SELECT COA.[CoaId] AS [ID], COA.[TreeName] AS [NAME], GL.[Quantity], GL.[UnitPrice], GL.[Credit] AS AMOUNT, GL.[TaxPercent] AS TAX, 'Shop' AS TYPENAME
+	FROM #Acc_GL AS GL INNER JOIN [Acc_COA] AS COA ON COA.[CoaId] = GL.[CoaId]
+	WHERE GL.[TranTypeId] = 2  AND GL.[ItemId] IS NULL AND GL.[IsPostpaid] = 1 AND (IsSalesCredit=0 OR (IsSalesCredit=1 AND CreditPaidDate=@date))
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	--GROUP BY
+	--TAB.[ID],TAB.[NAME],TAB.[AMOUNT],TAB.[TYPENAME],TAB.[Quantity],TAB.[UnitPrice],TAB.[TAX]
+
+
+INSERT INTO #temp 
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'Monthly' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , ISNULL(TAB.[Quantity],0) AS Quantity, 0 AS UnitPrice, ISNULL(TAB.AMOUNT,0) AS AMOUNT, 0 AS TAX, 2 AS TYPEID, 1 AS GROUPID
+	FROM
+	(SELECT GL.[CoaId] AS [ID] , CST.[FirstName] + ' '+ CST.[LastName] AS [NAME] ,GL.Quantity, GL.[Debit] AS AMOUNT,'Monthly' AS TYPENAME
+	FROM #Acc_GL AS GL INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+	WHERE GL.[CoaId] = 11 AND GL.[TranTypeId] = 3 AND GL.[IsPostpaid] = 1
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	GROUP BY
+	TAB.[ID],TAB.[NAME],TAB.Quantity,TAB.[AMOUNT],TAB.[TYPENAME]
+
+INSERT INTO #temp 
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'DEPOSIT' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	0 AS ID, 'DEPOSIT' AS NAME , 0 AS Quantity, 0 AS UnitPrice, ISNULL(TAB.AMOUNT,0) AS AMOUNT, 0 AS TAX, 4 AS TYPEID, 2 AS GROUPID
+	FROM
+	(SELECT SUM(ISNULL(GL.[Debit],0)) - SUM(ISNULL(GL.[Credit],0)) AS AMOUNT, 'DEPOSIT' AS TYPENAME
+	FROM #Acc_GL AS GL
+	WHERE  GL.[CoaId] = 11 AND GL.[TranTypeId] IN (6) --AND GL.[isactive] = 1 
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	GROUP BY
+	TAB.[TYPENAME],TAB.AMOUNT
+
+INSERT INTO #temp 
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'CASHOUT' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , 0 AS Quantity, 0 AS UnitPrice, -ISNULL(TAB.AMOUNT,0) AS AMOUNT, 0 AS TAX, ISNULL(TAB.[TYPEID],5) AS TYPEID, ISNULL(TAB.[GROUPID],3) AS GROUPID
+	FROM
+	(SELECT GL.[VendorId] AS [ID] , VEND.[FirstName] + ' '+ VEND.[LastName] AS [NAME] , SUM(GL.[Credit]) AS AMOUNT, 'CASHOUT' AS TYPENAME,4 AS TYPEID, 3 AS GROUPID
+	FROM #Acc_GL AS GL INNER JOIN [Vendor] AS VEND ON VEND.[ID] = GL.[VendorId]
+	WHERE
+	GL.[CoaId] = 11 AND GL.[TranTypeId] IN (1,4) AND GL.[VendorId] IS NOT NULL
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	GROUP BY
+	GL.[VendorId],  VEND.[FirstName],VEND.[LastName]
+
+	UNION
+
+	SELECT 
+	COA.[CoaId] AS [ID], COA.[TreeName] AS [NAME] , SUM(GL.[Debit]) AS AMOUNT, 'CASHOUT' AS TYPENAME, 5 AS TYPEID, 3 AS GROUPID
+	FROM #Acc_GL AS GL INNER JOIN [Acc_COA] AS COA ON COA.[CoaId] = GL.[CoaId] AND COA.[HeadAccount] = 4
+	WHERE
+	GL.[TranTypeId] IN (4)  AND GL.[VendorId] IS NULL
+	AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	GROUP BY
+	COA.[CoaId], COA.[TreeName]
+	) AS TAB
+	GROUP BY
+	TAB.[TYPENAME],TAB.[ID],TAB.[NAME],TAB.AMOUNT,TAB.[TYPEID],TAB.[GROUPID]
+
+DROP TABLE #Acc_GL
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='Sales')=0)
+BEGIN insert into #temp 
+select 'Sales' AS TypeName,0 ,'', 0,0,0,0,1,1  --group by TypeName
+END
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='Shop')=0)
+BEGIN insert into #temp 
+select 'Shop' AS TypeName,0 ,'', 0,0,0,0,3,1  --group by TypeName
+END
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='Monthly')=0)
+BEGIN insert into #temp 
+select 'Monthly' AS TypeName,0 ,'' , 0,0,0,0,2,1  --group by TypeName
+END
+
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='CASHOUT')=0)
+BEGIN insert into #temp 
+select 'CASHOUT' AS TypeName,0 ,'' , 0,0,0,0,5,3  --group by TypeName
+END
+
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='DEPOSIT')=0)
+BEGIN insert into #temp 
+select 'DEPOSIT' AS TypeName,0 ,'' , 0,0,0,0,4,2  --group by TypeName
+END
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('Monthly Collected') ELSE 'Monthly Collected' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='Monthly' --group by TypeName
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('Shop Collected') ELSE 'Shop Collected' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='Shop' --group by TypeName
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('Sales Collected') ELSE 'Sales Collected' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='Sales' --group by TypeName
+
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('TOTAL CASH OUT') ELSE 'TOTAL CASH OUT' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='CASHOUT' --group by TypeName
+
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('TOTAL CASH IN HAND') ELSE 'TOTAL CASH IN HAND' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName IN('Sales','Shop','Monthly','OPENING','CASHOUT','DEPOSIT') --group by TypeName
+
+Select * from #temp
+
+DROP TABLE #temp
+
+END
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnPaidCustomers]    Script Date: 10/09/2019 16:11:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[Credit_GetUnPaidCustomers]
+
+AS
+
+BEGIN
+
+SELECT Distinct C.Id,C.FirstName+' '+C.LastName CustomerName FROM Customer C 
+INNER JOIN Acc_GL GL ON C.Id=GL.CustId
+WHERE GL.TranTypeId=2 AND GL.CoaId=10  AND GL.IsActive=1
+
+END
+
+GO
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnpaidCreditSales]    Script Date: 10/09/2019 16:11:06 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+ALTER Procedure [dbo].[Credit_GetUnpaidCreditSales]
+@ActivityStartDate DATETIME,
+@ActivityEndDate DATETIME
+
+AS
+
+BEGIN
+
+SELECT InvoiceNo ,C.Id CustId,C.FirstName+' '+C.LastName CustomerName,ActivityTimestamp SalesDate,Debit  Amount FROM Acc_GL GL 
+INNER Join Customer C ON GL.CustId=C.Id WHERE 
+GL.[TranTypeId] = 2 AND CoaId=10 AND GL.IsActive=1
+AND Gl.ActivityTimestamp>@ActivityStartDate AND Gl.ActivityTimestamp < @ActivityEndDate
+
+END
+
+

@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Customer Reports";
+}
+
+
+
+
+
+<link href="~/css/plugins/chosen/chosen.css" rel="stylesheet" />
+<div class="container" style="margin-top:20px">
+    <h2>Customer Reports</h2>
+    <div>
+
+        <div class="row">
+            <div class="col-sm-1 text-right">
+                <label>Start</label>
+            </div>
+            <div class="col-sm-2">
+
+                <div class="input-group date " data-provide="datepicker">
+                    <input type="text" id="dtp_Customer_MainStartDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1 text-right">
+                <label>End</label>
+            </div>
+            <div class="col-sm-2">
+
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtp_Customer_MainEndDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+
+                <select id="ddl_customer" multiple>
+                    @foreach (var keys in ViewBag.Customers)
+                    {
+                        <option value="@keys.id">@keys.firstName  @keys.lastName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <input type="button" class="btn btn-success" id="btn_CustomerReport_View" value="VIEW" />
+                <input type="button" class="btn btn-success" id="btn_CustomerSearch_Search" value="DOWNLOAD" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <iframe id="ReportPreview" src="" style="height:75vh;width:100%" frameborder="0"></iframe>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/Scripts/custom/Report.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/js/plugins/chosen/chosen.jquery.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        ReportsTrigger();
+        $("#dtp_Customer_MainStartDate").val(moment().subtract('days', 30).format('YYYY-MM-DD'));
+        $("#dtp_Customer_MainEndDate").val(moment().format('YYYY-MM-DD'));
+        $("#ddl_customer").chosen();
+    });
+</script>
+
+

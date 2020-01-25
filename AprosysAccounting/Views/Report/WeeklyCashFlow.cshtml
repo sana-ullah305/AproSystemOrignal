@@ -1,0 +1,45 @@
+﻿
+
+    <div>
+        <h2 class="text-center">Weekly Cash Flow</h2>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4">
+                <label class="col-sm-5">Date Start</label>
+                <div class="input-group date " data-provide="datepicker">
+                    <input type="text" id="dtp_weeklycashflow_MainStartDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <input type="button" class="btn btn-success" id="btn_weeklyCashFlow_View" value="View" />
+                <input type="button" class="btn btn-success" id="btn_weeklyCashFlow_Search" value="Download" />
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <iframe id="ReportPreview" src="" style="height:75vh;width:100%" frameborder="0"></iframe>
+            </div>
+        </div>
+
+    </div>
+
+
+
+<script src="~/Scripts/custom/Report.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+
+
+<script type="text/javascript">
+ 
+    $(document).ready(function () {
+        ReportsTrigger();
+        $("#dtp_weeklycashflow_MainStartDate").parent().datepicker("setDaysOfWeekDisabled", "0,2,3,4,5,6");
+        $("#dtp_weeklycashflow_MainStartDate").val(moment().format('YYYY-MM-DD'));
+    });
+</script>
+

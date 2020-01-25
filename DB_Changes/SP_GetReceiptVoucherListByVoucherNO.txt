@@ -1,0 +1,29 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[GetReceiptVoucherListByVoucherNO]    Script Date: 03/29/2019 11:29:30 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetReceiptVoucherListByVoucherNO]
+(
+	@voucherNo NVARCHAR(50),
+	@typeID int
+	
+)
+AS
+BEGIN
+
+SELECT
+	GL.[Debit] AS Amount, CST.[LastName] + ' '+ CST.[FirstName]  AS Customer,CST.Phone, GL.[ActivityTimestamp],GL.[InvoiceNo],CST.Id AS CustId,
+	GL.[Comments],USR.[LastName] +' '+USR.FirstName AS SalePerson,
+	CASE WHEN CST.[TypeId] =1 THEN 'Receivable Amount' ELSE 'Subscription Amount' END AS TYPED,GL.IsSalesCredit
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] --AND (0 = @typeID OR CST.TypeId = @typeID)
+	LEFT OUTER JOIN [User] AS USR ON USR.[Id] = GL.[UserId]
+WHERE
+	(GL.[CoaId] = 0 AND GL.[TranTypeId] = 3) AND (@voucherNo = '' OR GL.[InvoiceNo] = @voucherNo)
+	
+
+END

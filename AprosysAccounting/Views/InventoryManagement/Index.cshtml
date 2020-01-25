@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container" style="margin-top:20px">
+
+
+    <div style="margin-top:80px">
+
+        
+        @*<div class="row">
+            <div class="col-sm-3" style="float:right">
+                <input type="button" class="btn btn-success" id="btn_item_AddNewItem" value="Add New Item" style="float:right" />
+            </div>
+        </div>*@
+
+
+        <br />
+
+        <table id="tblInventoryManagment" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                   
+                    <th class="text-center success">Code</th>
+                    <th class="text-center success">Name</th>
+                    @*<th class="text-center success">Unit</th>*@
+                    <th class="text-center success">Remaining Quantity</th>
+                    @*<th class="text-center success">Purchase Rate</th>
+                    <th class="text-center success">Sale Rate</th>
+                    <th class="text-center success">Tax</th>
+                    <th class="text-center success">Description</th>
+                    <th class="text-center success">Action</th>*@
+                </tr>
+            </thead>
+            <tbody class="tblactive"></tbody>
+
+        </table>
+    </div>
+
+
+
+
+</div>
+
+
+
+<script src="~/Scripts/custom/InventoryManagement.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        ItemLoadInventory();
+    });
+
+
+
+
+</script>
+
+

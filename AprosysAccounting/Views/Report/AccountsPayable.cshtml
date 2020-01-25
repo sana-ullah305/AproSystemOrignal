@@ -1,0 +1,47 @@
+﻿
+
+<div>
+    <h3>Accounts Payable</h3>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+            <div class="col-sm-3">
+                <label style="float:right;">Vendor</label>
+            </div>
+            <div class="col-sm-9">
+                <select id="ddl_AccountsPayable_Vendor" class="form-control ddl_AccountsPayable_Vendor">
+                    @*<option value="0">ALL</option>*@
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <input type="button" class="btn btn-success" id="btn_AccountsPayable_View" value="VIEW" />
+            <input type="button" class="btn btn-success" id="btn_AccountsPayable_Search" value="DOWNLOAD" />
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <iframe id="ReportPreview" src="" style="height:75vh;width:100%" frameborder="0"></iframe>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="~/Scripts/custom/Report.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        ReportsTrigger();
+        GetVendors($('.ddl_AccountsPayable_Vendor'));
+    });
+
+</script>
+
+

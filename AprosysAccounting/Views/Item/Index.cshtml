@@ -1,0 +1,282 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+<style type="text/css">
+    .LtrInputWrap {
+        position: relative;
+    }
+        .LtrInputWrap:before {
+            position: absolute;
+            top: 7px;
+            font-size: 14px;
+            content: "LTR.";
+            left: 5px;
+            line-height: 1.42857143;
+        }
+</style>
+<div class="container" style="margin-left:10px;margin-right:10px;width:100%;height:100%;">
+
+
+    <div style="margin-top:80px">
+
+        <div class="row">
+            <div class="col-sm-3 hidden">
+                <label>Date Start</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtp_item_MainStartDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 hidden">
+                <label>Date End</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" id="dtp_item_MainEndDate" class="form-control" readonly>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-2">
+                <label>Search By</label>
+                <select class="form-control" id="ddl_item_SearchBy">
+                    <option value="0"></option>
+                    <option value="1">Item Name</option>
+                    <option value="2">Item Code</option>
+
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>&nbsp;</label>
+                <input type="text" class="form-control" id="txt_item_Search" maxlength="50" />
+            </div>
+            <div class="col-sm-2">
+                <br />
+                <label>&nbsp;</label>
+                <input type="button" class="btn btn-success" id="btn_item_Search" value="Search" style="margin-top:3%;" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3" style="float:right">
+                <input type="button" class="btn btn-success col-sm-8" id="btn_item_AddNewItem" value="Add New Item" style="float:right" />
+            </div>
+            <div class="col-sm-3" style="float:right">
+                <input type="button" class="btn btn-success col-sm-8" id="btn_item_downLoadExcel" value="Download Excel" style="float:right" />
+            </div>
+        </div>
+
+        <br />
+
+        <table id="tblItemInformation" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center success">Name</th>
+                    <th class="text-center success">Code</th>
+                    <th class="text-center success">Unit</th>
+                    <th class="text-center success">Min Qty</th>
+                    <th class="text-center success">Purchase Rate</th>
+                    <th class="text-center success">Sale Rate</th>
+                    <!--<th class="text-center success">Tax</th>-->
+                    <th class="text-center success">Description</th>
+                    <th class="text-center success">Stock</th>
+                    <th class="text-center success">Stock In Ltrs.</th>
+                    <th class="text-center success">Stock In Amount</th>
+                    <th class="text-center success">Oil Grade</th>
+                    <th class="text-center success">Packing In Ltrs.</th>
+                    <th class="text-center success">Qty In Carton</th>
+                    <th class="text-center success">Action</th>
+                </tr>
+            </thead>
+            <tbody class="tblactive"></tbody>
+
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="AdjustQtyModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddNewItemModal" style="width:1100px">
+        <div class="modal-content col-xs-12">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Adjust Quantity</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+                    <div class="col-sm-0 hidden">
+                        <label id="lblItemID"></label>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Item</label>
+                        <input type="text" class="form-control" id="txtItem" disabled="disabled" value="Ionic" />
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Account</label>
+                        <select class="form-control" id="ddlAccount">
+                            <option value="0" disabled>--Select--</option>
+                            <option value="Piece">Piece</option>
+                            <option value="Box">Box</option>
+                            <option value="Carton">Carton</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>UnitPrice</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus  StopPasting text-right" id="txtUnitPrice" value="0" oninput="validity.valid||(value='');" min="0" />
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control text-right" disabled="disabled" id="txtStock" value="55" />
+                    </div>
+
+                    <div class="col-sm-2">
+                        <label>Adjust</label>
+                        <input type="number" class="form-control StopPasting text-right" id="txtAdjust" value="0" oninput="validity.valid||(value='');" min="0" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-success" id="btnitemSave" value="Save" />
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AddNewItemModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddNewItemModal" style="width:700px">
+        <div class="modal-content col-xs-11">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Add New Item</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+                    <div class="col-sm-0">
+                        <label id="lbl_item_id"></label>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Code</label>
+                        <input type="text" class="form-control" id="txt_item_Code" maxlength="13" />
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="txt_item_Name" maxlength="50" />
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Unit</label>
+                        <select class="form-control" id="ddl_item_unit">
+                            @*<option value="0" disabled>--Select--</option>*@
+                            <option value="Piece" selected>Piece</option>
+                            @*<option value="Box">Box</option>
+                            <option value="Carton">Carton</option>*@
+
+                        </select>
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Min Quantity</label>
+                        <input type="number" min="0" class="form-control  StopPasting" oninput="validity.valid||(value='');" id="txt_item_MinQty" max="9999" />
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Purchase Rate</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_item_PurchaseRate" maxlength="6" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Sale Rate</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_item_SellRate" maxlength="6" />
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Oil Grade</label>
+                        <select class="form-control ddl_oilgrade" id="ddl_oilgrade"><option value="0" selected></option></select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Packing in LTR</label>
+                        <div class="LtrInputWrap">
+                            <input type="text" class="form-control CurrencyFormatting StopPasting" id="txt_oil_ltr" maxlength="4" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Quantity In Carton</label>
+                        <input type="number" class="form-control QuantityInCarton" name="QuantityInCarton" id="qty_in_carton" onKeyPress="if(this.value.length==2) return false;" min="0"/>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-8">
+                        <label>Description</label>
+                        <input type="text" class="form-control" id="txt_item_Description" maxlength="250" />
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label>IsTaxable: </label><br />
+                        <input class="form-check-input col-sm-5" type="checkbox" id="chk_item_isTaxable" style="height:25px;">
+                    </div>
+                    <div class="col-sm-4 hidden">
+                        <label>Tax</label>
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_item_tax" maxlength="8" />
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-success" id="btn_item_Save" value="Save" />
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+<script src="~/Theme/js/jquery.inputpicker.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/Item.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        ItemTrigger();
+    });
+
+
+
+
+</script>
+
+

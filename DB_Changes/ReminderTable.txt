@@ -1,0 +1,32 @@
+USE [AprosysAccounting]
+GO
+
+/****** Object:  Table [dbo].[Reminders]    Script Date: 03/11/2019 20:04:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Reminders](
+	[SubscriptionID] [int] NOT NULL,
+	[CurrentCycleRemindercount] [tinyint] NULL,
+	[ReminderLog] [nvarchar](256) NULL,
+	[LastReminderSentDate] [datetime] NULL
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Reminders]  WITH CHECK ADD  CONSTRAINT [FK_Reminders_SubscriptionID] FOREIGN KEY([SubscriptionID])
+REFERENCES [dbo].[Subscription] ([Id])
+GO
+
+ALTER TABLE [dbo].[Reminders] CHECK CONSTRAINT [FK_Reminders_SubscriptionID]
+GO
+
+
+GO
+
+ALTER TABLE Reminders     
+ADD CONSTRAINT FK_Reminders_SubscriptionID FOREIGN KEY (SubscriptionID)  
+REFERENCES Subscription (Id)

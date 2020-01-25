@@ -1,0 +1,68 @@
+01-24-2020 11:28:00 - ErrorLog : Error for GUID=2e352ee5-ca9d-4888-ae63-5556d7fa35e5 Url  http://localhost:59871/creditSales/GetUnPaidCreditCustomerList - System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at AprosysAccounting.BussinessLogics.BL_CreditSales.GetUnPaidCreditCustomerInvoices(Int32 custID) in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\BussinessLogics\BL_CreditSales.cs:line 166
+   at AprosysAccounting.BussinessLogics.BL_CreditSales.GetUnPaidCreditCustomerList() in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\BussinessLogics\BL_CreditSales.cs:line 138
+   at AprosysAccounting.Controllers.CreditSalesController.GetUnPaidCreditCustomerList() in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Controllers\CreditSalesController.cs:line 30
+   at lambda_method(Closure , ControllerBase , Object[] )
+   at System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   at System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+Error: 
+01-24-2020 11:28:00 - ErrorLog : Error in sending email System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: value
+   at System.Net.Mail.SmtpClient.set_Port(Int32 value)
+   at AprosysAccounting.Appcode.Email.sendEmail(String _message, String Subject, String toEmailAddress, Boolean MessageIsHTML, SortedList`2 attachmentPath, String FromAddress) in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Appcode\Email.cs:line 69 - 
+Error: 
+01-24-2020 11:28:00 - ErrorLog : Error in sending email System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: value
+   at System.Net.Mail.SmtpClient.set_Port(Int32 value)
+   at AprosysAccounting.Appcode.Email.sendEmail(String _message, String Subject, String toEmailAddress, Boolean MessageIsHTML, SortedList`2 attachmentPath, String FromAddress) in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Appcode\Email.cs:line 106
+   at AprosysAccounting.Appcode.Email.<>c__DisplayClass4_0.<sendEmailAsync>b__0() in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Appcode\Email.cs:line 118 - 
+Error: 
+01-24-2020 11:29:47 - ErrorLog : Error for GUID=8a2aab18-322a-4ac1-82a1-13a06aef745a Url  http://localhost:59871/creditSales/GetUnPaidCreditCustomerList - System.Collections.Generic.KeyNotFoundException: The given key was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at AprosysAccounting.BussinessLogics.BL_CreditSales.GetUnPaidCreditCustomerInvoices(Int32 custID) in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\BussinessLogics\BL_CreditSales.cs:line 166
+   at AprosysAccounting.BussinessLogics.BL_CreditSales.GetUnPaidCreditCustomerList() in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\BussinessLogics\BL_CreditSales.cs:line 138
+   at AprosysAccounting.Controllers.CreditSalesController.GetUnPaidCreditCustomerList() in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Controllers\CreditSalesController.cs:line 30
+   at lambda_method(Closure , ControllerBase , Object[] )
+   at System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   at System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+Error: 
+01-24-2020 11:29:47 - ErrorLog : Error in sending email System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: value
+   at System.Net.Mail.SmtpClient.set_Port(Int32 value)
+   at AprosysAccounting.Appcode.Email.sendEmail(String _message, String Subject, String toEmailAddress, Boolean MessageIsHTML, SortedList`2 attachmentPath, String FromAddress) in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Appcode\Email.cs:line 69 - 
+Error: 
+01-24-2020 11:29:47 - ErrorLog : Error in sending email System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+Parameter name: value
+   at System.Net.Mail.SmtpClient.set_Port(Int32 value)
+   at AprosysAccounting.Appcode.Email.sendEmail(String _message, String Subject, String toEmailAddress, Boolean MessageIsHTML, SortedList`2 attachmentPath, String FromAddress) in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Appcode\Email.cs:line 106
+   at AprosysAccounting.Appcode.Email.<>c__DisplayClass4_0.<sendEmailAsync>b__0() in D:\Sana Ullah\AproSys - Orignal Panel Modified\AprosysAccounting\Appcode\Email.cs:line 118 - 
+Error: 

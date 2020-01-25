@@ -1,0 +1,22 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[GetSubscriptionByVoucherNo]    Script Date: 3/19/2019 10:52:47 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetSubscriptionByVoucherNo]
+@voucherNo NVARCHAR(50)
+AS
+BEGIN
+
+SELECT
+	GL.[Debit] AS Amount, CST.[LastName] + ' '+ CST.[FirstName] AS Customer, GL.[ActivityTimestamp],GL.[InvoiceNo],CST.Id CustId,GL.Comments,SUBS.SubscriptionAmount --CST.Misc
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]  AND GL.IsActive =1
+	INNER JOIN [Subscription] AS SUBS ON SUBS.CustId=CST.Id AND SUBS.IsActive=1
+WHERE
+	GL.[CoaId] = 0 AND GL.[TranTypeId] = 3 AND GL.[InvoiceNo] = @voucherNo
+	
+END

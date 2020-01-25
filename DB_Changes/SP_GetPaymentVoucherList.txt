@@ -1,0 +1,45 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[GetPaymentVoucherList]    Script Date: 3/21/2019 1:51:09 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[GetPaymentVoucherList]
+(
+	@voucherNo NVARCHAR(50),
+	@dtStart datetime,
+	@dtEnd datetime
+)
+AS
+BEGIN
+
+SELECT
+	GL.[Debit] AS Amount, CASE WHEN CST.[FirstName] IS NULL THEN 'PAYABLE' ELSE 'RECEIVABLE' END AS HEADTYPE, 
+	 ISNULL(CST.[LastName],'')+ISNULL(VEND.[LastName],'')+ ' '+  ISNULL(CST.[FirstName],'')+ISNULL(VEND.[FirstName],'') AS Acting, 
+	GL.[ActivityTimestamp],GL.[InvoiceNo],
+	ISNULL(ISNULL(CST.Id,0)+ISNULL(VEND.ID,0),0) ActingId,
+	CASE WHEN CST.[FirstName] IS NULL THEN 12 ELSE 10 END AS HEADTYPEID,
+	ISNULL(CST.Misc,'')+ISNULL(Vend.Misc,'') Comments
+FROM
+	[Acc_GL] AS GL
+	LEFT JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+	LEFT JOIN [Vendor] AS VEND ON VEND.[ID] = GL.[VendorId]
+WHERE
+	(GL.[TranId] IS NULL AND GL.[TranTypeId] = 4 AND (GL.[CustId] IS NOT NULL OR GL.[VendorId] IS NOT NULL ) AND (@voucherNo = '' OR GL.[InvoiceNo] = @voucherNo))
+	AND GL.IsActive=1
+	AND (GL.ActivityTimestamp >= @dtStart AND GL.ActivityTimestamp <= @dtEnd)
+UNION
+SELECT
+	GL.[Debit] AS Amount, 'EXPENSE' AS HEADTYPE, COA.[TreeName] AS Acting, GL.[ActivityTimestamp],GL.[InvoiceNo],
+	ISNULL(COA.CoaId,0) ActingId,ISNULL(COA.PId,0) HEADTYPEID,GL.Misc AS Comments
+FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Acc_COA] AS COA ON COA.[CoaId] = GL.[CoaId] AND COA.[HeadAccount] = 4
+WHERE
+	(GL.[TranTypeId] = 4 AND (GL.[CustId] IS NULL AND GL.[VendorId] IS NULL ) AND (@voucherNo = '' OR GL.[InvoiceNo] = @voucherNo))
+	AND GL.IsActive=1
+	AND (GL.ActivityTimestamp >= @dtStart AND GL.ActivityTimestamp <= @dtEnd)
+END
+
+--[dbo].[GetPaymentVoucherList] '','03-14-2019','03-22-2019'

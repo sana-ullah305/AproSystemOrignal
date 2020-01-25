@@ -1,0 +1,60 @@
+
+/****** Object:  Table [dbo].[tblBanks]    Script Date: 10/01/2019 10:36:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[tblBanks](
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](256) NULL,
+ CONSTRAINT [PK_tblBanks] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+
+
+
+
+
+
+INSERT  INTO tblBanks VALUES(1,'Al Baraka Bank(Pakistan) Limitted.')
+INSERT  INTO tblBanks VALUES(2,'Allied Bank (Pakistan) Limited.')
+INSERT  INTO tblBanks VALUES(3,'Askari Bank (Pakistan) Limited.')
+INSERT  INTO tblBanks VALUES(4,'Bank Alfalah (Pakistan) Limited.')
+INSERT  INTO tblBanks VALUES(5,'Bank Al-Habib (Pakistan) Limited.')
+INSERT  INTO tblBanks VALUES(6,'BankIslami Pakistan Limited.')
+INSERT  INTO tblBanks VALUES(7,'Citi Bank N.A.')
+INSERT  INTO tblBanks VALUES(8,'Deutsche Bank A.G.')
+INSERT  INTO tblBanks VALUES(9,'The Bank of Tokyo-Mitsubishi UFJ')
+INSERT  INTO tblBanks VALUES(10,'Dubai Islamic Bank Pakistan Limited.')
+INSERT  INTO tblBanks VALUES(11,'Faysal Bank Limited.')
+INSERT  INTO tblBanks VALUES(12,'First Women Bank Limited.')
+INSERT  INTO tblBanks VALUES(13,'Finca Microfinace Bank Limited')
+INSERT  INTO tblBanks VALUES(14,'Habib Bank Limited.')
+INSERT  INTO tblBanks VALUES(15,'Standard Chartered Bank(Pakistan) Limited.')
+INSERT  INTO tblBanks VALUES(16,'Habib Metropolitan Bank Limited.')
+INSERT  INTO tblBanks VALUES(17,'Industrial and Commercial Bank of China')
+INSERT  INTO tblBanks VALUES(18,'Industrial Development Bank of Pakistan')
+INSERT  INTO tblBanks VALUES(19,'JS Bank Limited.')
+INSERT  INTO tblBanks VALUES(20,'MCB Bank Limited.')
+INSERT  INTO tblBanks VALUES(21,'MCB Islamic Bank Limited.')
+INSERT  INTO tblBanks VALUES(22,'Meezan Bank Limited.')
+INSERT  INTO tblBanks VALUES(23,'National Bank of Pakistan')
+INSERT  INTO tblBanks VALUES(24,'S.M.E.Bank Limited.')
+INSERT  INTO tblBanks VALUES(25,'Samba Bank Limited.')
+INSERT  INTO tblBanks VALUES(26,'Silk Bank Limited')
+INSERT  INTO tblBanks VALUES(27,'Sindh Bank Limited.')
+INSERT  INTO tblBanks VALUES(28,'Soneri Bank Limited.')
+INSERT  INTO tblBanks VALUES(29,'Summit Bank Limited.')
+INSERT  INTO tblBanks VALUES(30,'The Bank of Khyber.')
+INSERT  INTO tblBanks VALUES(31,'The Bank of Punjab.')
+INSERT  INTO tblBanks VALUES(32,'The Punjab Provincial Cooperative Bank Limited.')
+INSERT  INTO tblBanks VALUES(33,'United Bank Limited.')
+INSERT  INTO tblBanks VALUES(34,'Zarai Taraqiati Bank Limited.')

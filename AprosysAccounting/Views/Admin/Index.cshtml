@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MOMAND ENTERPRISES</title>
+
+
+    <link rel='stylesheet prefetch' href='~/Theme/css/bootstrap.min.css'>
+</head>
+<body>
+    <div class="wrapper">
+        <form class="form-signin Loginform" role="form" method="post">
+            <h2>MOMAND ENTERPRISES</h2>
+            <input type="hidden" name="redirecturl" />
+            <h2 class="form-signin-heading">Please Login</h2>
+            <input type="text" class="form-control" name="username" id="txt_UserName" placeholder="User Name" required="" autofocus="" />
+            <br />
+            <input type="password" class="form-control" name="password" id="txt_Password" placeholder="Password" required="" />
+
+            <button class="btn btn-lg btn-primary btn-block btnLogin" type="submit">Login</button>
+            @if (ViewBag.Validation != null)
+            {
+                <label id="-error" class="error" for="">@Html.Raw(ViewBag.Validation).</label>
+            }
+        </form>
+    </div>
+
+</body>
+</html>
+

@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+
+<div class="container" style="margin-top:20px">
+
+    <h2>Bank Detail</h2>
+
+    <div style="margin-top:80px">
+        <table id="tblBankDetail" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center success">Account #</th>
+                    
+                    <th class="text-center success">Action</th>
+                </tr>
+            </thead>
+            <tbody class="tblBankDetail_tblactive"></tbody>
+
+        </table>
+
+
+        <br />
+        <div class="row">
+            <div class="col-sm-3">
+                <label>Current Cash + Cheque In Hand</label>
+            </div>
+            <div class="col-sm-2">
+                <div class="currencyInputWrap">
+                    <input type="text" class="form-control CurrencyFormatting CurrentCash" readonly />
+                    </div>
+                    </div>
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+<div id="DepositModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Pay Cash</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Amount</label>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting DepositAmount" maxlength="8" />
+                            </div>
+                        </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Deposit Date</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="input-group datetimepker">
+                            <input type="text" class="form-control datetimepker linkToDatePermission" id="dtp_bank_depositDate" readonly>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Document/Cheque</label>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <select class="form-control ddl_bank_Document" id="ddl_bank_DocumentId">
+                            <option value="0" disabled>--Select--</option>
+
+                        </select>
+                    </div>
+
+                </div>
+                </br>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Comment</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" maxlength="255" id="inp_DepositComment" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default DepositAmount_Save">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="WithdrawModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Cash With Draw</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Amount</label>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="currencyInputWrap">
+                            <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting WithDrawAmount" maxlength="8" />
+                            </div>
+                        </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>WithDraw Date</label>
+                    </div>
+
+                    <div class="col-sm-6">
+
+                        <div class="input-group datetimepker">
+                            <input type="text" class="form-control datetimepker linkToDatePermission" id="dtp_bank_withDrawDate" readonly>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>Comment</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" maxlength="255"  id="inp_WithDrawComment"/>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default WithDrawAmount_Save">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/Scripts/custom/Bank.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        BankDetail();
+    });
+</script>

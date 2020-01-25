@@ -1,0 +1,3 @@
+
+alter table Acc_COA 
+add ServiceCode nvarchar(50)

@@ -1,0 +1,30 @@
+USE [AprosysAccounting]
+GO
+
+/****** Object:  Table [dbo].[ReportConfig]    Script Date: 2/13/2019 7:21:40 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ReportConfig](
+	[repoConfigID] [int] IDENTITY(1,1) NOT NULL,
+	[title] [nvarchar](50) NULL,
+	[address] [nvarchar](400) NULL,
+	[detailTitle] [nvarchar](50) NULL,
+	[detail] [nvarchar](max) NULL,
+	[active] [bit] NULL,
+	[createdBy] [nvarchar](50) NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [nvarchar](50) NULL,
+	[modifiedDate] [datetime] NULL,
+ CONSTRAINT [PK_ReportConfig] PRIMARY KEY CLUSTERED 
+(
+	[repoConfigID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+

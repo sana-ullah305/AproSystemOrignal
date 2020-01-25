@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+
+<div class="container" style="margin-top:20px">
+
+
+    <div style="margin-top:80px">
+
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <div class="col-sm-3"><label>Expense Name</label></div>
+                <div class="col-sm-6"><input type="text" id="txt_expense_Name" class="form-control" maxlength="50"></div>
+                <div class="col-sm-3"><input type="button" class="btn btn-success" id="btn_expense_Add" value="Save" /></div>
+            </div>
+            <div class="col-sm-3"></div>
+
+        </div>
+
+
+        <br />
+
+        <table id="tblExpenseInformation" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center success">Id</th>
+                    <th class="text-center success">Name</th>
+                    <th class="text-center success">Action</th>
+                </tr>
+            </thead>
+            <tbody class="tblactive"></tbody>
+
+        </table>
+    </div>
+
+
+
+
+</div>
+<div class="modal fade" id="AddNewAdministrativeModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+    <div class="modal-dialog modal-lg AddNewAdministrativeModal" id="mdl_addExpense" style="width:500px">
+        <div class="modal-content col-xs-11">
+            <div class="modal-header h5" id="div_payment_AddNewExpense">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Edit Administrative Expense</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row">
+                    <div hidden><label id="lbl_pvoucher_AdministrativeExpenseId"></label></div>
+                    <div class="col-sm-4">  <label>Expense Name</label></div>
+                    <div class="col-sm-8"><input type="text" class="form-control" id="txt_pvoucher_AdministrativeExpense" maxlength="50" /></div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="btn_pvoucher_SaveExpense" value="Save" />
+                <a href="#" class="btn btn-default" data-dismiss="modal" id="btn_pvoucher_closeExpense">Close</a>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/Expense.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        ExpenseTrigger();
+    });
+</script>
+
+

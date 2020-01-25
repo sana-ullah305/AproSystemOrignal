@@ -1,0 +1,19 @@
+GO
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnPaidCustomersInvoice]    Script Date: 24/09/2019 7:31:03 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[Credit_GetUnPaidCustomersInvoice]
+@CustomerID int
+AS
+BEGIN 
+SELECT  InvoiceNo,ActivityTimestamp SalesDate,Debit Amount  FROM Acc_GL 
+WHERE
+TranTypeId=2 AND CoaId=10 AND CustId=@CustomerID AND IsActive=1
+END
+
+
+
+

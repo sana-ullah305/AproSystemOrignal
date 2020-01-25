@@ -1,0 +1,63 @@
+﻿
+
+<div >
+    <h3>Accounts Receivable</h3>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="col-sm-1">
+             <label>Type</label>
+            </div>
+
+            <div class="col-sm-4">
+                <select id="ddl_AccountsReceivable_Vendor" class="form-control ddl_AccountsReceivable_Vendor">
+                    <option value="0" disabled>--Select--</option>
+                    <option value="1">Account Receivable</option>
+                    <option value="2">Subscription Receivable</option>
+                </select>
+            </div>
+            <div class="col-sm-1">
+                <label>Customer</label>
+            </div>
+            <div class="col-sm-3">
+                <select id="ddl_AccountsReceivable_SubCustomer" class="form-control ddl_AccountsReceivable_SubCustomer">
+                    <option value="0">ALL</option>
+
+                </select>
+            </div>
+            <div class="col-sm-3">
+            <input type="button" class="btn btn-success" id="btn_AccountsReceivable_View" value="VIEW" />
+                <input type="button" class="btn btn-success" id="btn_AccountsReceivable_Search" value="DOWNLOAD" />
+            </div>
+        </div>
+       
+
+
+        <div class="col-sm-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <iframe id="ReportPreview" src="" style="height:75vh;width:100%" frameborder="0"></iframe>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="~/Scripts/custom/Report.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        ReportsTrigger();
+        $('.ddl_AccountsReceivable_Vendor').val(2);
+        GetCustomers(2);
+      
+    });
+</script>
+
+
+

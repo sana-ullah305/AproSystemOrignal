@@ -1,0 +1,2096 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AprosysAccountingModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Acc_COA">
+          <Key>
+            <PropertyRef Name="CoaId" />
+          </Key>
+          <Property Name="CoaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PId" Type="int" />
+          <Property Name="CoaNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="HeadAccount" Type="int" />
+          <Property Name="TreeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CoaLevel" Type="int" />
+          <Property Name="OpeningBalance" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Cost" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="ServiceCode" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Acc_GL">
+          <Key>
+            <PropertyRef Name="GlId" />
+          </Key>
+          <Property Name="GlId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TranId" Type="int" />
+          <Property Name="TranTypeId" Type="int" />
+          <Property Name="CoaId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="VendorId" Type="int" />
+          <Property Name="CustId" Type="int" />
+          <Property Name="ItemId" Type="int" />
+          <Property Name="UnitPrice" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Quantity" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="QuantityBalance" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="TaxPercent" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="IsGift" Type="bit" />
+          <Property Name="FiscarlYear" Type="int" />
+          <Property Name="Credit" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Debit" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="ActivityTimestamp" Type="datetime" />
+          <Property Name="Discount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="256" />
+          <Property Name="Misc" Type="nvarchar" MaxLength="256" />
+          <Property Name="IsPostpaid" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="SubscriptionDueDate" Type="datetime" />
+          <Property Name="IsSalesCredit" Type="bit" />
+          <Property Name="CreditPaidDate" Type="datetime" />
+          <Property Name="SalesPersonId" Type="int" />
+          <Property Name="DocumentId" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Acc_GLTxLinks">
+          <Key>
+            <PropertyRef Name="GLTxLinkID" />
+          </Key>
+          <Property Name="GLTxLinkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GLID" Type="int" />
+          <Property Name="RelGLID" Type="int" />
+          <Property Name="Quantity" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Credit" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Debit" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="FiscalYear" Type="int" />
+          <Property Name="TranTypeID" Type="int" />
+          <Property Name="ItemID" Type="int" />
+          <Property Name="UnitPrice" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Acc_PartialCredit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceNum" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+          <Property Name="AddedBy" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AprosysAccounting.dbo.Acc_TransactionTypes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Acc_TransactionTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeId" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="OpeningBalance" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Misc" Type="nvarchar" MaxLength="256" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SalesPersonId" Type="int" />
+          <Property Name="CNIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="NTN" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="FinancialYear">
+          <Key>
+            <PropertyRef Name="YearId" />
+          </Key>
+          <Property Name="YearId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Financialyear" Type="int" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemTypeId" Type="int" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+          <Property Name="MinQty" Type="decimal" Precision="6" Scale="2" />
+          <Property Name="TaxPercent" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="PurchasePrice" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="SellPrice" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsTaxable" Type="bit" />
+          <Property Name="PackingInLitre" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="QuantityInCarton" Type="int" />
+          <Property Name="OilGradeId" Type="int" />
+        </EntityType>
+        <EntityType Name="ItemType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OilGrade">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OilGade" Type="varchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AprosysAccounting.dbo.Reminders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Reminders">
+          <Key>
+            <PropertyRef Name="SubscriptionID" />
+          </Key>
+          <Property Name="SubscriptionID" Type="int" Nullable="false" />
+          <Property Name="CurrentCycleRemindercount" Type="tinyint" />
+          <Property Name="ReminderLog" Type="nvarchar(max)" />
+          <Property Name="LastReminderSentDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ReportConfig">
+          <Key>
+            <PropertyRef Name="repoConfigID" />
+          </Key>
+          <Property Name="repoConfigID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="address" Type="nvarchar" MaxLength="400" />
+          <Property Name="detailTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="detail" Type="nvarchar(max)" />
+          <Property Name="active" Type="bit" />
+          <Property Name="createdBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="createdDate" Type="datetime" />
+          <Property Name="modifiedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="modifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SalesPerson">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="OpeningBalance" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Misc" Type="nvarchar" MaxLength="256" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CNIC" Type="nvarchar" MaxLength="20" />
+          <Property Name="NTN" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Subscription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustId" Type="int" Nullable="false" />
+          <Property Name="SubscriptionAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="DueDate" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="SubStatus" Type="bit" />
+        </EntityType>
+        <EntityType Name="SubscriptionExcludingDates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustId" Type="int" Nullable="false" />
+          <Property Name="SubDisableStartDate" Type="datetime" />
+          <Property Name="SubDisableEndDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Taxes">
+          <Key>
+            <PropertyRef Name="taxesID" />
+          </Key>
+          <Property Name="taxesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="taxesName" Type="nvarchar" MaxLength="50" />
+          <Property Name="taxPercent" Type="decimal" Precision="6" Scale="3" />
+        </EntityType>
+        <EntityType Name="tblBanks">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AprosysAccounting.dbo.tblinvoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblinvoice">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="256" />
+          <Property Name="JoiningDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdminRights" Type="bit" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Terms" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreditLimit" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Balance" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="256" />
+          <Property Name="Misc" Type="nvarchar" MaxLength="256" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="NTN" Type="nvarchar" MaxLength="20" />
+          <Property Name="CNIC" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK_Reminders_SubscriptionID">
+          <End Role="Subscription" Type="Self.Subscription" Multiplicity="1" />
+          <End Role="Reminders" Type="Self.Reminders" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Subscription">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Reminders">
+              <PropertyRef Name="SubscriptionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Credit_GetUnpaidCreditSales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActivityStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="ActivityEndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Credit_GetUnPaidCustomers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Credit_GetUnPaidCustomersInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Credit_UpdateUnPaidCreditSales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InvoiceNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustID" Type="int" Mode="In" />
+          <Parameter Name="CreditPaidDate" Type="datetime" Mode="In" />
+          <Parameter Name="ModifiedBy" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeletePurchase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="userID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetBanksWithBalances" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetCustomerBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="cstID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetDailyCashFlow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="date" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GetLastVoucherNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="transTypeid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetPaymentVoucherByVoucherNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetPaymentVoucherList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="dtStart" Type="datetime" Mode="In" />
+          <Parameter Name="dtEnd" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GetPurchaseList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="vendorID" Type="int" Mode="In" />
+          <Parameter Name="itemID" Type="int" Mode="In" />
+          <Parameter Name="dtStart" Type="datetime" Mode="In" />
+          <Parameter Name="dtEnd" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GetReceiptVoucherList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="typeID" Type="int" Mode="In" />
+          <Parameter Name="dtStart" Type="datetime" Mode="In" />
+          <Parameter Name="dtEnd" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GetReceiptVoucherListByVoucherNO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="typeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetSaleInvoiceList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startDate" Type="datetime" Mode="In" />
+          <Parameter Name="endDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GetServiceName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetStockAlerts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetStockList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="itemID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetSubscriptionByVoucherNo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetSubscriptionList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetSubscriptionVoucherList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="ActivityStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="ActivityEndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GetVendorBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="vendID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Report_AccountsPayable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="vendorID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Report_AccountsReceivable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="custID" Type="int" Mode="In" />
+          <Parameter Name="typeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Report_BankStatement3" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="coaID" Type="int" Mode="In" />
+          <Parameter Name="beginDate" Type="datetime2" Mode="In" />
+          <Parameter Name="endDate" Type="datetime2" Mode="In" />
+        </Function>
+        <Function Name="Report_CashFlow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="dtStart" Type="datetime" Mode="In" />
+          <Parameter Name="dtEnd" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Report_GetPurchaseInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Report_GetSaleInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="voucherNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Report_IncomeStatement" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="dtStart" Type="datetime" Mode="In" />
+          <Parameter Name="dtEnd" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Report_ItemWiseSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="dtStart" Type="datetime" Mode="In" />
+          <Parameter Name="dtEnd" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Report_MonthlySubscription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="year" Type="int" Mode="In" />
+          <Parameter Name="SubsType" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Report_TrialBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="dtStart" Type="datetime" Mode="In" />
+          <Parameter Name="dtEnd" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="Report_WeeklyCashFlow" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ActivityTime" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="ResetGL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="usp_GetSubDuesofCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetTotalPaidofCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustID" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="AprosysAccountingModel1StoreContainer">
+          <EntitySet Name="Acc_COA" EntityType="Self.Acc_COA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Acc_GL" EntityType="Self.Acc_GL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Acc_GLTxLinks" EntityType="Self.Acc_GLTxLinks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Acc_PartialCredit" EntityType="Self.Acc_PartialCredit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FinancialYear" EntityType="Self.FinancialYear" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemType" EntityType="Self.ItemType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OilGrade" EntityType="Self.OilGrade" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportConfig" EntityType="Self.ReportConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalesPerson" EntityType="Self.SalesPerson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscription" EntityType="Self.Subscription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubscriptionExcludingDates" EntityType="Self.SubscriptionExcludingDates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Taxes" EntityType="Self.Taxes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblBanks" EntityType="Self.tblBanks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Acc_TransactionTypes" EntityType="Self.Acc_TransactionTypes" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Acc_TransactionTypes].[Id] AS [Id], 
+    [Acc_TransactionTypes].[Name] AS [Name], 
+    [Acc_TransactionTypes].[IsActive] AS [IsActive]
+    FROM [dbo].[Acc_TransactionTypes] AS [Acc_TransactionTypes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Reminders" EntityType="Self.Reminders" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Reminders].[SubscriptionID] AS [SubscriptionID], 
+    [Reminders].[CurrentCycleRemindercount] AS [CurrentCycleRemindercount], 
+    [Reminders].[ReminderLog] AS [ReminderLog], 
+    [Reminders].[LastReminderSentDate] AS [LastReminderSentDate]
+    FROM [dbo].[Reminders] AS [Reminders]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tblinvoice" EntityType="Self.tblinvoice" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblinvoice].[id] AS [id], 
+    [tblinvoice].[name] AS [name]
+    FROM [dbo].[tblinvoice] AS [tblinvoice]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Reminders_SubscriptionID" Association="Self.FK_Reminders_SubscriptionID">
+            <End Role="Subscription" EntitySet="Subscription" />
+            <End Role="Reminders" EntitySet="Reminders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AprosysAccountingModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Acc_COA">
+          <Key>
+            <PropertyRef Name="CoaId" />
+          </Key>
+          <Property Name="CoaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PId" Type="Int32" />
+          <Property Name="CoaNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HeadAccount" Type="Int32" />
+          <Property Name="TreeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CoaLevel" Type="Int32" />
+          <Property Name="OpeningBalance" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Cost" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ServiceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Acc_GLTxLinks">
+          <Key>
+            <PropertyRef Name="GLTxLinkID" />
+          </Key>
+          <Property Name="GLTxLinkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GLID" Type="Int32" />
+          <Property Name="RelGLID" Type="Int32" />
+          <Property Name="Quantity" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Credit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Debit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="FiscalYear" Type="Int32" />
+          <Property Name="TranTypeID" Type="Int32" />
+          <Property Name="ItemID" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="FinancialYear">
+          <Key>
+            <PropertyRef Name="YearId" />
+          </Key>
+          <Property Name="YearId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Financialyear1" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ItemType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Terms" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreditLimit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Balance" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Misc" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="NTN" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Acc_TransactionTypes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="AprosysAccountingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Acc_COA" EntityType="Self.Acc_COA" />
+          <EntitySet Name="Acc_GLTxLinks" EntityType="Self.Acc_GLTxLinks" />
+          <EntitySet Name="FinancialYears" EntityType="Self.FinancialYear" />
+          <EntitySet Name="ItemTypes" EntityType="Self.ItemType" />
+          <EntitySet Name="Vendors" EntityType="Self.Vendor" />
+          <EntitySet Name="Acc_TransactionTypes" EntityType="Self.Acc_TransactionTypes" />
+          <FunctionImport Name="GetCustomerBalance" ReturnType="Collection(AprosysAccountingModel1.GetCustomerBalance_Result)">
+          <Parameter Name="cstID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetLastVoucherNo" ReturnType="Collection(String)">
+          <Parameter Name="transTypeid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetPaymentVoucherByVoucherNo" ReturnType="Collection(AprosysAccountingModel1.GetPaymentVoucherByVoucherNo_Result)">
+          <Parameter Name="voucherNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetReceiptVoucherList" ReturnType="Collection(AprosysAccountingModel1.GetReceiptVoucherList_Result)">
+            <Parameter Name="voucherNo" Mode="In" Type="String" />
+            <Parameter Name="typeID" Mode="In" Type="Int32" />
+            <Parameter Name="dtStart" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEnd" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetStockList" ReturnType="Collection(AprosysAccountingModel1.GetStockList_Result)">
+          <Parameter Name="itemID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetVendorBalance" ReturnType="Collection(AprosysAccountingModel1.GetVendorBalance_Result)">
+          <Parameter Name="vendID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Report_AccountsPayable" ReturnType="Collection(AprosysAccountingModel1.Report_AccountsPayable_Result)">
+          <Parameter Name="vendorID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Report_CashFlow" ReturnType="Collection(AprosysAccountingModel1.Report_CashFlow_Result)">
+            <Parameter Name="dtStart" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEnd" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_GetPurchaseInvoice" ReturnType="Collection(AprosysAccountingModel1.Report_GetPurchaseInvoice_Result)">
+          <Parameter Name="voucherNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Report_IncomeStatement" ReturnType="Collection(AprosysAccountingModel1.Report_IncomeStatement_Result)">
+            <Parameter Name="dtStart" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEnd" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_TrialBalance" ReturnType="Collection(AprosysAccountingModel1.Report_TrialBalance_Result)">
+            <Parameter Name="dtStart" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEnd" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="Taxes" EntityType="AprosysAccountingModel1.Tax" />
+          <FunctionImport Name="GetBanksWithBalances" ReturnType="Collection(AprosysAccountingModel1.GetBanksWithBalances_Result)" />
+          <FunctionImport Name="GetStockAlerts" ReturnType="Collection(AprosysAccountingModel1.GetStockAlerts_Result)" />
+          <FunctionImport Name="ResetGL" />
+          <EntitySet Name="Users" EntityType="AprosysAccountingModel1.User" />
+          <FunctionImport Name="DeletePurchase">
+            <Parameter Name="voucherNo" Mode="In" Type="String" />
+            <Parameter Name="userID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetDailyCashFlow" ReturnType="Collection(AprosysAccountingModel1.GetDailyCashFlow_Result)">
+          <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetPaymentVoucherList" ReturnType="Collection(AprosysAccountingModel1.GetPaymentVoucherList_Result)">
+            <Parameter Name="voucherNo" Mode="In" Type="String" />
+            <Parameter Name="dtStart" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEnd" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetSubscriptionByVoucherNo" ReturnType="Collection(AprosysAccountingModel1.GetSubscriptionByVoucherNo_Result)">
+          <Parameter Name="voucherNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetPurchaseList" ReturnType="Collection(AprosysAccountingModel1.GetPurchaseList_Result)">
+            <Parameter Name="vendorID" Mode="In" Type="Int32" />
+            <Parameter Name="itemID" Mode="In" Type="Int32" />
+            <Parameter Name="dtStart" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEnd" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="ReportConfigs" EntityType="AprosysAccountingModel1.ReportConfig" />
+          <FunctionImport Name="GetSubscriptionVoucherList" ReturnType="Collection(AprosysAccountingModel1.GetSubscriptionVoucherList_Result)">
+            <Parameter Name="voucherNo" Mode="In" Type="String" />
+            <Parameter Name="ActivityStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ActivityEndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Credit_GetUnpaidCreditSales" ReturnType="Collection(AprosysAccountingModel1.Credit_GetUnpaidCreditSales_Result)">
+            <Parameter Name="ActivityStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ActivityEndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Credit_GetUnPaidCustomers" ReturnType="Collection(AprosysAccountingModel1.Credit_GetUnPaidCustomers_Result)" />
+          <FunctionImport Name="Credit_UpdateUnPaidCreditSales">
+            <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+            <Parameter Name="CustID" Mode="In" Type="Int32" />
+            <Parameter Name="CreditPaidDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ModifiedBy" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Credit_GetUnPaidCustomersInvoice" ReturnType="Collection(AprosysAccountingModel1.Credit_GetUnPaidCustomersInvoice_Result)">
+          <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetSaleInvoiceList" ReturnType="Collection(AprosysAccountingModel1.GetSaleInvoiceList_Result)">
+            <Parameter Name="startDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetServiceName" ReturnType="Collection(AprosysAccountingModel1.GetServiceName_Result)" />
+          <FunctionImport Name="GetReceiptVoucherListByVoucherNO" ReturnType="Collection(AprosysAccountingModel1.GetReceiptVoucherListByVoucherNO_Result)">
+            <Parameter Name="voucherNo" Mode="In" Type="String" />
+            <Parameter Name="typeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Report_AccountsReceivable" ReturnType="Collection(AprosysAccountingModel1.Report_AccountsReceivable_Result)">
+            <Parameter Name="custID" Mode="In" Type="Int32" />
+            <Parameter Name="typeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Reminders" EntityType="AprosysAccountingModel1.Reminder" />
+          <FunctionImport Name="Report_BankStatement1">
+            <Parameter Name="coaID" Mode="In" Type="Int32" />
+            <Parameter Name="beginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_BankStatement2">
+            <Parameter Name="coaID" Mode="In" Type="Int32" />
+            <Parameter Name="beginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_BankStatement3" ReturnType="Collection(AprosysAccountingModel1.Report_BankStatement3_Result)">
+            <Parameter Name="coaID" Mode="In" Type="Int32" />
+            <Parameter Name="beginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_BankStatement4">
+            <Parameter Name="coaID" Mode="In" Type="Int32" />
+            <Parameter Name="beginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_BankStatement">
+            <Parameter Name="coaID" Mode="In" Type="Int32" />
+            <Parameter Name="beginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="endDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="Acc_PartialCredit" EntityType="AprosysAccountingModel1.Acc_PartialCredit" />
+          <EntitySet Name="Subscriptions" EntityType="AprosysAccountingModel1.Subscription" />
+          <AssociationSet Name="FK_Reminders_SubscriptionID" Association="AprosysAccountingModel1.FK_Reminders_SubscriptionID">
+            <End Role="Subscription" EntitySet="Subscriptions" />
+            <End Role="Reminder" EntitySet="Reminders" />
+          </AssociationSet>
+          <EntitySet Name="SubscriptionExcludingDates" EntityType="AprosysAccountingModel1.SubscriptionExcludingDate" />
+          <FunctionImport Name="Report_WeeklyCashFlow" ReturnType="Collection(AprosysAccountingModel1.Report_WeeklyCashFlow_Result)">
+          <Parameter Name="ActivityTime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_MonthlySubscription" ReturnType="Collection(AprosysAccountingModel1.Report_MonthlySubscription_Result)">
+            <Parameter Name="year" Mode="In" Type="Int32" />
+            <Parameter Name="SubsType" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetSubscriptionList" ReturnType="Collection(AprosysAccountingModel1.GetSubscriptionList_Result)" />
+          <FunctionImport Name="usp_GetSubDuesofCustomer" ReturnType="Collection(AprosysAccountingModel1.usp_GetSubDuesofCustomer_Result)">
+          <Parameter Name="CustID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetTotalPaidofCustomer" ReturnType="Collection(AprosysAccountingModel1.usp_GetTotalPaidofCustomer_Result)">
+          <Parameter Name="CustID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="tblinvoices" EntityType="AprosysAccountingModel1.tblinvoice" />
+          <EntitySet Name="Customers" EntityType="AprosysAccountingModel1.Customer" />
+          <EntitySet Name="SalesPersons" EntityType="AprosysAccountingModel1.SalesPerson" />
+          <EntitySet Name="Acc_GL" EntityType="AprosysAccountingModel1.Acc_GL" />
+          <EntitySet Name="tblBanks" EntityType="AprosysAccountingModel1.tblBank" />
+          <EntitySet Name="OilGrades" EntityType="AprosysAccountingModel1.OilGrade" />
+          <EntitySet Name="Items" EntityType="AprosysAccountingModel1.Item" />
+          <FunctionImport Name="Report_ItemWiseSale" ReturnType="Collection(AprosysAccountingModel1.Report_ItemWiseSale_Result)">
+            <Parameter Name="dtStart" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEnd" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="Report_GetSaleInvoice" ReturnType="Collection(AprosysAccountingModel1.Report_GetSaleInvoice_Result)">
+            <Parameter Name="voucherNo" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetCustomerBalance_Result">
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="CustId" Nullable="true" />
+          <Property Type="String" Name="customer" Nullable="true" MaxLength="101" />
+        </ComplexType>
+        <ComplexType Name="GetPaymentVoucherByVoucherNo_Result">
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="HEADTYPE" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Acting" Nullable="true" MaxLength="201" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ActingId" Nullable="false" />
+          <Property Type="Int32" Name="HEADTYPEID" Nullable="false" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="512" />
+        </ComplexType>
+        <ComplexType Name="GetReceiptVoucherList_Result">
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="Customer" Nullable="true" MaxLength="101" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CustId" Nullable="false" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="SalePerson" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="TYPED" Nullable="false" MaxLength="19" />
+        </ComplexType>
+        <ComplexType Name="GetStockList_Result">
+          <Property Type="Int32" Name="ItemId" Nullable="true" />
+          <Property Type="String" Name="ItemCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="QTY" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="GetVendorBalance_Result">
+          <Property Type="Decimal" Name="Balance" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="VendorId" Nullable="true" />
+          <Property Type="String" Name="customer" Nullable="true" MaxLength="101" />
+        </ComplexType>
+        <ComplexType Name="Report_AccountsPayable_Result">
+          <Property Type="Decimal" Name="AMOUNT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="VENDOR" Nullable="true" MaxLength="101" />
+        </ComplexType>
+        <ComplexType Name="Report_CashFlow_Result">
+          <Property Type="Decimal" Name="Debit" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="Credit" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="OPENINGBAL" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="TransType" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Report_GetPurchaseInvoice_Result">
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ItemCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ItemId" Nullable="true" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="UnitPrice" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="AMOUNT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="COMMENTS" Nullable="true" MaxLength="256" />
+          <Property Type="DateTime" Name="ACTTIMESTAMP" Nullable="true" Precision="23" />
+          <Property Type="String" Name="TYPED" Nullable="false" MaxLength="6" />
+          <Property Type="Decimal" Name="BALANCE" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="PAID" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="VENDNAME" Nullable="true" MaxLength="101" />
+          <Property Type="Int32" Name="vendID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Report_IncomeStatement_Result">
+          <Property Type="String" Name="TYPED" Nullable="false" MaxLength="7" />
+          <Property Type="Decimal" Name="REVAMOUNT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="EXPAMOUNT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="TreeName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Report_TrialBalance_Result">
+          <Property Type="Decimal" Name="DEBIT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="CREDIT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="ACCOUNT" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="Tax">
+          <Key>
+            <PropertyRef Name="taxesID" />
+          </Key>
+          <Property Name="taxesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="taxesName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="taxPercent" Type="Decimal" Precision="6" Scale="3" />
+        </EntityType>
+        <ComplexType Name="GetBanksWithBalances_Result">
+          <Property Type="String" Name="BANKNAME" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="BankID" Nullable="false" />
+          <Property Type="Decimal" Name="AMOUNT" Nullable="false" Precision="38" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="GetStockAlerts_Result">
+          <Property Type="Int32" Name="ItemId" Nullable="true" />
+          <Property Type="String" Name="ItemCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="QTY" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="MinQty" Nullable="true" Precision="6" Scale="2" />
+        </ComplexType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AdminRights" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="GetDailyCashFlow_Result">
+          <Property Type="String" Name="TYPENAME" Nullable="false" MaxLength="7" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="NAME" Nullable="false" MaxLength="101" />
+          <Property Type="Decimal" Name="Quantity" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="UnitPrice" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="AMOUNT" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="TAX" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="TYPEID" Nullable="false" />
+          <Property Type="Int32" Name="GROUPID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetPaymentVoucherList_Result">
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="HEADTYPE" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Acting" Nullable="true" MaxLength="201" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ActingId" Nullable="false" />
+          <Property Type="Int32" Name="HEADTYPEID" Nullable="false" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="512" />
+        </ComplexType>
+        <ComplexType Name="GetSubscriptionByVoucherNo_Result">
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="Customer" Nullable="true" MaxLength="101" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CustId" Nullable="false" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="256" />
+          <Property Type="Decimal" Name="SubscriptionAmount" Nullable="false" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="GetPurchaseList_Result">
+          <Property Type="Int32" Name="ItemId" Nullable="true" />
+          <Property Type="String" Name="ItemCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="UnitPrice" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="Debit" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="ReportConfig">
+          <Key>
+            <PropertyRef Name="repoConfigID" />
+          </Key>
+          <Property Name="repoConfigID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="detailTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Boolean" />
+          <Property Name="createdBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="createdDate" Type="DateTime" Precision="3" />
+          <Property Name="modifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="modifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="GetSubscriptionVoucherList_Result">
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="Customer" Nullable="true" MaxLength="101" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CustId" Nullable="false" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="256" />
+          <Property Type="Decimal" Name="SubscriptionAmount" Nullable="false" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="Credit_GetUnpaidCreditSales_Result">
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CustId" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="101" />
+          <Property Type="DateTime" Name="SalesDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="Credit_GetUnPaidCustomers_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="CustomerName" Nullable="true" MaxLength="101" />
+        </ComplexType>
+        <ComplexType Name="Credit_GetUnPaidCustomersInvoice_Result">
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="SalesDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="GetSaleInvoiceList_Result">
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="cstName" Nullable="true" MaxLength="101" />
+          <Property Type="Boolean" Name="isCustomerActive" Nullable="false" />
+          <Property Type="Decimal" Name="NETAMOUNT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="PAID" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="BAL" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="IsDeletable" Nullable="false" />
+          <Property Type="Boolean" Name="IsSalesCredit" Nullable="true" />
+          <Property Type="DateTime" Name="CreditPaidDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="GetServiceName_Result">
+          <Property Type="Int32" Name="CoaId" Nullable="false" />
+          <Property Type="String" Name="TreeName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Cost" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="ServiceCode" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetReceiptVoucherListByVoucherNO_Result">
+          <Property Type="Decimal" Name="Amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="Customer" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CustId" Nullable="false" />
+          <Property Type="String" Name="Comments" Nullable="true" MaxLength="256" />
+          <Property Type="String" Name="SalePerson" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="TYPED" Nullable="false" MaxLength="19" />
+          <Property Type="Boolean" Name="IsSalesCredit" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Report_AccountsReceivable_Result">
+          <Property Type="Decimal" Name="AMOUNT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="VENDOR" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="TYPED" Nullable="false" MaxLength="12" />
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ActivityTimestamp" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="Reminder">
+          <Key>
+            <PropertyRef Name="SubscriptionID" />
+          </Key>
+          <Property Name="SubscriptionID" Type="Int32" Nullable="false" />
+          <Property Name="CurrentCycleRemindercount" Type="Byte" />
+          <Property Name="ReminderLog" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastReminderSentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Subscription" Relationship="AprosysAccountingModel1.FK_Reminders_SubscriptionID" FromRole="Reminder" ToRole="Subscription" />
+        </EntityType>
+        <ComplexType Name="Report_BankStatement3_Result">
+          <Property Type="Int32" Name="GlId" Nullable="false" />
+          <Property Type="Int32" Name="TranId" Nullable="true" />
+		  <Property Type="Int32" Name="TranTypeId" Nullable="true" />
+		  <Property Type="Int32" Name="CoaId" Nullable="true" />
+          <Property Type="Decimal" Name="Credit" Nullable="true" Precision="10" Scale="2" />
+		  <Property Type="Decimal" Name="Debit" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="DateTime" Name="ActivityTimeStamp" Nullable="true" />
+          
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+		  <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+		  <Property Type="String" Name="Comments" Nullable="true" MaxLength="250" />
+		  <Property Type="Decimal" Name="Balance" Nullable="true" Precision="10" Scale="2" />
+		  <Property Type="String" Name="AccountName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="Acc_PartialCredit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceNum" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <Property Name="AddedBy" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subscription">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustId" Type="Int32" Nullable="false" />
+          <Property Name="SubscriptionAmount" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="DueDate" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SubStatus" Type="Boolean" />
+          <NavigationProperty Name="Reminder" Relationship="AprosysAccountingModel1.FK_Reminders_SubscriptionID" FromRole="Subscription" ToRole="Reminder" />
+        </EntityType>
+        <Association Name="FK_Reminders_SubscriptionID">
+          <End Type="AprosysAccountingModel1.Subscription" Role="Subscription" Multiplicity="1" />
+          <End Type="AprosysAccountingModel1.Reminder" Role="Reminder" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Subscription">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Reminder">
+              <PropertyRef Name="SubscriptionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SubscriptionExcludingDate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustId" Type="Int32" Nullable="false" />
+          <Property Name="SubDisableStartDate" Type="DateTime" Precision="3" />
+          <Property Name="SubDisableEndDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="Report_WeeklyCashFlow_Result">
+          <Property Type="String" Name="TYPE" Nullable="false" MaxLength="22" />
+          <Property Type="Decimal" Name="MON" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="TUE" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="WED" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="THU" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="FRI" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="SAT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="SUN" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="TOTAL" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Int32" Name="TYPED" Nullable="false" />
+          <Property Type="Int32" Name="Sort" Nullable="false" />
+          <Property Type="DateTime" Name="MonDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TueDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="WedDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ThuDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="FriDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="SatDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="SunDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="Report_MonthlySubscription_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="DueDate" Nullable="false" />
+          <Property Type="Decimal" Name="SubscriptionAmount" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="JANDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="JANPAID" Nullable="false" Precision="1" Scale="1" />
+          <Property Type="Decimal" Name="FEBDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="FEBPAID" Nullable="false" Precision="1" Scale="1" />
+          <Property Type="Decimal" Name="MARDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="MARPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="APRDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="APRPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="MAYDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="MAYPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="JUNDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="JUNPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="JULDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="JULPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="AUGDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="AUGPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="SEPDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="SEPPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="OCTDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="OCTPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="NOVDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="NOVPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="DECDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="DECPAID" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="TOTDUE" Nullable="false" Precision="2" Scale="1" />
+          <Property Type="Decimal" Name="TOTPAID" Nullable="false" Precision="2" Scale="1" />
+        </ComplexType>
+        <ComplexType Name="GetSubscriptionList_Result">
+          <Property Type="Int32" Name="subid" Nullable="false" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="SubscriptionAmount" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="DueDate" Nullable="false" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="SubStatus" Nullable="true" />
+          <Property Type="DateTime" Name="SubDisableStartDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="SubDisableEndDate" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="usp_GetSubDuesofCustomer_Result">
+          <Property Type="Int32" Name="TranId" Nullable="true" />
+          <Property Type="DateTime" Name="SubscriptionDueDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="CustId" Nullable="true" />
+          <Property Type="Decimal" Name="Debit" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="AllDueBefore" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="usp_GetTotalPaidofCustomer_Result">
+          <Property Type="Int32" Name="CustId" Nullable="true" />
+          <Property Type="Decimal" Name="TotPaid" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="DateTime" Name="LastPaid" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="tblinvoice">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OpeningBalance" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Misc" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="SalesPersonId" Type="Int32" />
+          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NTN" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SalesPerson">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OpeningBalance" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Misc" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CNIC" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NTN" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Acc_GL">
+          <Key>
+            <PropertyRef Name="GlId" />
+          </Key>
+          <Property Name="GlId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TranId" Type="Int32" />
+          <Property Name="TranTypeId" Type="Int32" />
+          <Property Name="CoaId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="VendorId" Type="Int32" />
+          <Property Name="CustId" Type="Int32" />
+          <Property Name="ItemId" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Quantity" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="QuantityBalance" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="TaxPercent" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="IsGift" Type="Boolean" />
+          <Property Name="FiscarlYear" Type="Int32" />
+          <Property Name="Credit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Debit" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ActivityTimestamp" Type="DateTime" Precision="3" />
+          <Property Name="Discount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Misc" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="IsPostpaid" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="SubscriptionDueDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSalesCredit" Type="Boolean" />
+          <Property Name="CreditPaidDate" Type="DateTime" Precision="3" />
+          <Property Name="SalesPersonId" Type="Int32" />
+          <Property Name="DocumentId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblBank">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="OilGrade">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OilGade" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemTypeId" Type="Int32" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MinQty" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="TaxPercent" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="PurchasePrice" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="SellPrice" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsTaxable" Type="Boolean" />
+          <Property Name="PackingInLitre" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="QuantityInCarton" Type="Int32" />
+          <Property Name="OilGradeId" Type="Int32" />
+        </EntityType>
+        <ComplexType Name="Report_ItemWiseSale_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="ItemName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Qty" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="PurchRate" Nullable="false" Precision="38" Scale="6" />
+          <Property Type="Decimal" Name="SaleRate" Nullable="true" Precision="38" Scale="6" />
+          <Property Type="Decimal" Name="SaleIncTax" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="NetSale" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="TaxToPay" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="Earnings" Nullable="false" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="PackingInLitre" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="QuantityInCarton" Nullable="false" />
+          <Property Type="String" Name="OilGade" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Report_GetSaleInvoice_Result">
+          <Property Type="String" Name="InvoiceNo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ItemCode" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="QuantityInLitre" Nullable="true" Precision="21" Scale="4" />
+          <Property Type="Decimal" Name="AmountPerLitre" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Unit" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="ItemId" Nullable="true" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="UnitPrice" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="AMOUNT" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="COMMENTS" Nullable="true" MaxLength="256" />
+          <Property Type="DateTime" Name="ACTTIMESTAMP" Nullable="true" Precision="23" />
+          <Property Type="String" Name="TYPED" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="SERVICETYPE" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="CoaId" Nullable="true" />
+          <Property Type="Decimal" Name="BALANCE" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="PAID" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="TAX" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="CSTNAME" Nullable="true" MaxLength="101" />
+          <Property Type="Int32" Name="cstID" Nullable="false" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IsSalesCredit" Nullable="true" />
+          <Property Type="DateTime" Name="CreditPaidDate" Nullable="true" Precision="23" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AprosysAccountingModel1StoreContainer" CdmEntityContainer="AprosysAccountingEntities">
+          <EntitySetMapping Name="Acc_COA">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Acc_COA">
+              <MappingFragment StoreEntitySet="Acc_COA">
+                <ScalarProperty Name="ServiceCode" ColumnName="ServiceCode" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="CoaId" ColumnName="CoaId" />
+                <ScalarProperty Name="PId" ColumnName="PId" />
+                <ScalarProperty Name="CoaNo" ColumnName="CoaNo" />
+                <ScalarProperty Name="HeadAccount" ColumnName="HeadAccount" />
+                <ScalarProperty Name="TreeName" ColumnName="TreeName" />
+                <ScalarProperty Name="CoaLevel" ColumnName="CoaLevel" />
+                <ScalarProperty Name="OpeningBalance" ColumnName="OpeningBalance" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Acc_GLTxLinks">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Acc_GLTxLinks">
+              <MappingFragment StoreEntitySet="Acc_GLTxLinks">
+                <ScalarProperty Name="GLTxLinkID" ColumnName="GLTxLinkID" />
+                <ScalarProperty Name="GLID" ColumnName="GLID" />
+                <ScalarProperty Name="RelGLID" ColumnName="RelGLID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="Debit" ColumnName="Debit" />
+                <ScalarProperty Name="FiscalYear" ColumnName="FiscalYear" />
+                <ScalarProperty Name="TranTypeID" ColumnName="TranTypeID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FinancialYears">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.FinancialYear">
+              <MappingFragment StoreEntitySet="FinancialYear">
+                <ScalarProperty Name="YearId" ColumnName="YearId" />
+                <ScalarProperty Name="Financialyear1" ColumnName="Financialyear" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemTypes">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.ItemType">
+              <MappingFragment StoreEntitySet="ItemType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendors">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Vendor">
+              <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="NTN" ColumnName="NTN" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Terms" ColumnName="Terms" />
+                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Misc" ColumnName="Misc" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Acc_TransactionTypes">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Acc_TransactionTypes">
+              <MappingFragment StoreEntitySet="Acc_TransactionTypes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetCustomerBalance" FunctionName="AprosysAccountingModel1.Store.GetCustomerBalance">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetCustomerBalance_Result">
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="customer" ColumnName="customer" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetLastVoucherNo" FunctionName="AprosysAccountingModel1.Store.GetLastVoucherNo" />
+          <FunctionImportMapping FunctionImportName="GetPaymentVoucherByVoucherNo" FunctionName="AprosysAccountingModel1.Store.GetPaymentVoucherByVoucherNo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetPaymentVoucherByVoucherNo_Result">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="HEADTYPE" ColumnName="HEADTYPE" />
+                <ScalarProperty Name="Acting" ColumnName="Acting" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ActingId" ColumnName="ActingId" />
+                <ScalarProperty Name="HEADTYPEID" ColumnName="HEADTYPEID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetReceiptVoucherList" FunctionName="AprosysAccountingModel1.Store.GetReceiptVoucherList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetReceiptVoucherList_Result">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="SalePerson" ColumnName="SalePerson" />
+                <ScalarProperty Name="TYPED" ColumnName="TYPED" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetStockList" FunctionName="AprosysAccountingModel1.Store.GetStockList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetStockList_Result">
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="QTY" ColumnName="QTY" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetVendorBalance" FunctionName="AprosysAccountingModel1.Store.GetVendorBalance">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetVendorBalance_Result">
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="customer" ColumnName="customer" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_AccountsPayable" FunctionName="AprosysAccountingModel1.Store.Report_AccountsPayable">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_AccountsPayable_Result">
+                <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+                <ScalarProperty Name="VENDOR" ColumnName="VENDOR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_CashFlow" FunctionName="AprosysAccountingModel1.Store.Report_CashFlow">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_CashFlow_Result">
+                <ScalarProperty Name="Debit" ColumnName="Debit" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="OPENINGBAL" ColumnName="OPENINGBAL" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_GetPurchaseInvoice" FunctionName="AprosysAccountingModel1.Store.Report_GetPurchaseInvoice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_GetPurchaseInvoice_Result">
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+                <ScalarProperty Name="COMMENTS" ColumnName="COMMENTS" />
+                <ScalarProperty Name="ACTTIMESTAMP" ColumnName="ACTTIMESTAMP" />
+                <ScalarProperty Name="TYPED" ColumnName="TYPED" />
+                <ScalarProperty Name="BALANCE" ColumnName="BALANCE" />
+                <ScalarProperty Name="PAID" ColumnName="PAID" />
+                <ScalarProperty Name="VENDNAME" ColumnName="VENDNAME" />
+                <ScalarProperty Name="vendID" ColumnName="vendID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_IncomeStatement" FunctionName="AprosysAccountingModel1.Store.Report_IncomeStatement">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_IncomeStatement_Result">
+                <ScalarProperty Name="TYPED" ColumnName="TYPED" />
+                <ScalarProperty Name="REVAMOUNT" ColumnName="REVAMOUNT" />
+                <ScalarProperty Name="EXPAMOUNT" ColumnName="EXPAMOUNT" />
+                <ScalarProperty Name="TreeName" ColumnName="TreeName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_TrialBalance" FunctionName="AprosysAccountingModel1.Store.Report_TrialBalance">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_TrialBalance_Result">
+                <ScalarProperty Name="DEBIT" ColumnName="DEBIT" />
+                <ScalarProperty Name="CREDIT" ColumnName="CREDIT" />
+                <ScalarProperty Name="ACCOUNT" ColumnName="ACCOUNT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Taxes">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Tax">
+              <MappingFragment StoreEntitySet="Taxes">
+                <ScalarProperty Name="taxPercent" ColumnName="taxPercent" />
+                <ScalarProperty Name="taxesName" ColumnName="taxesName" />
+                <ScalarProperty Name="taxesID" ColumnName="taxesID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetBanksWithBalances" FunctionName="AprosysAccountingModel1.Store.GetBanksWithBalances">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetBanksWithBalances_Result">
+                <ScalarProperty Name="BANKNAME" ColumnName="BANKNAME" />
+                <ScalarProperty Name="BankID" ColumnName="BankID" />
+                <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetStockAlerts" FunctionName="AprosysAccountingModel1.Store.GetStockAlerts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetStockAlerts_Result">
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="QTY" ColumnName="QTY" />
+                <ScalarProperty Name="MinQty" ColumnName="MinQty" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ResetGL" FunctionName="AprosysAccountingModel1.Store.ResetGL" />
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="AdminRights" ColumnName="AdminRights" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="DeletePurchase" FunctionName="AprosysAccountingModel1.Store.DeletePurchase" />
+          <FunctionImportMapping FunctionImportName="GetDailyCashFlow" FunctionName="AprosysAccountingModel1.Store.GetDailyCashFlow">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetDailyCashFlow_Result">
+                <ScalarProperty Name="TYPENAME" ColumnName="TYPENAME" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+                <ScalarProperty Name="TAX" ColumnName="TAX" />
+                <ScalarProperty Name="TYPEID" ColumnName="TYPEID" />
+                <ScalarProperty Name="GROUPID" ColumnName="GROUPID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPaymentVoucherList" FunctionName="AprosysAccountingModel1.Store.GetPaymentVoucherList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetPaymentVoucherList_Result">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="HEADTYPE" ColumnName="HEADTYPE" />
+                <ScalarProperty Name="Acting" ColumnName="Acting" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ActingId" ColumnName="ActingId" />
+                <ScalarProperty Name="HEADTYPEID" ColumnName="HEADTYPEID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSubscriptionByVoucherNo" FunctionName="AprosysAccountingModel1.Store.GetSubscriptionByVoucherNo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetSubscriptionByVoucherNo_Result">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="SubscriptionAmount" ColumnName="SubscriptionAmount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPurchaseList" FunctionName="AprosysAccountingModel1.Store.GetPurchaseList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetPurchaseList_Result">
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Debit" ColumnName="Debit" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ReportConfigs">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.ReportConfig">
+              <MappingFragment StoreEntitySet="ReportConfig">
+                <ScalarProperty Name="modifiedDate" ColumnName="modifiedDate" />
+                <ScalarProperty Name="modifiedBy" ColumnName="modifiedBy" />
+                <ScalarProperty Name="createdDate" ColumnName="createdDate" />
+                <ScalarProperty Name="createdBy" ColumnName="createdBy" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="detail" ColumnName="detail" />
+                <ScalarProperty Name="detailTitle" ColumnName="detailTitle" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="repoConfigID" ColumnName="repoConfigID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetSubscriptionVoucherList" FunctionName="AprosysAccountingModel1.Store.GetSubscriptionVoucherList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetSubscriptionVoucherList_Result">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="SubscriptionAmount" ColumnName="SubscriptionAmount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Credit_GetUnpaidCreditSales" FunctionName="AprosysAccountingModel1.Store.Credit_GetUnpaidCreditSales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Credit_GetUnpaidCreditSales_Result">
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="SalesDate" ColumnName="SalesDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Credit_GetUnPaidCustomers" FunctionName="AprosysAccountingModel1.Store.Credit_GetUnPaidCustomers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Credit_GetUnPaidCustomers_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Credit_UpdateUnPaidCreditSales" FunctionName="AprosysAccountingModel1.Store.Credit_UpdateUnPaidCreditSales" />
+          <FunctionImportMapping FunctionImportName="Credit_GetUnPaidCustomersInvoice" FunctionName="AprosysAccountingModel1.Store.Credit_GetUnPaidCustomersInvoice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Credit_GetUnPaidCustomersInvoice_Result">
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="SalesDate" ColumnName="SalesDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSaleInvoiceList" FunctionName="AprosysAccountingModel1.Store.GetSaleInvoiceList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetSaleInvoiceList_Result">
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="cstName" ColumnName="cstName" />
+                <ScalarProperty Name="isCustomerActive" ColumnName="isCustomerActive" />
+                <ScalarProperty Name="NETAMOUNT" ColumnName="NETAMOUNT" />
+                <ScalarProperty Name="PAID" ColumnName="PAID" />
+                <ScalarProperty Name="BAL" ColumnName="BAL" />
+                <ScalarProperty Name="IsDeletable" ColumnName="IsDeletable" />
+                <ScalarProperty Name="IsSalesCredit" ColumnName="IsSalesCredit" />
+                <ScalarProperty Name="CreditPaidDate" ColumnName="CreditPaidDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetServiceName" FunctionName="AprosysAccountingModel1.Store.GetServiceName">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetServiceName_Result">
+                <ScalarProperty Name="CoaId" ColumnName="CoaId" />
+                <ScalarProperty Name="TreeName" ColumnName="TreeName" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ServiceCode" ColumnName="ServiceCode" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetReceiptVoucherListByVoucherNO" FunctionName="AprosysAccountingModel1.Store.GetReceiptVoucherListByVoucherNO">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetReceiptVoucherListByVoucherNO_Result">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="SalePerson" ColumnName="SalePerson" />
+                <ScalarProperty Name="TYPED" ColumnName="TYPED" />
+                <ScalarProperty Name="IsSalesCredit" ColumnName="IsSalesCredit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_AccountsReceivable" FunctionName="AprosysAccountingModel1.Store.Report_AccountsReceivable">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_AccountsReceivable_Result">
+                <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+                <ScalarProperty Name="VENDOR" ColumnName="VENDOR" />
+                <ScalarProperty Name="TYPED" ColumnName="TYPED" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Reminders">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Reminder">
+              <MappingFragment StoreEntitySet="Reminders">
+                <ScalarProperty Name="LastReminderSentDate" ColumnName="LastReminderSentDate" />
+                <ScalarProperty Name="ReminderLog" ColumnName="ReminderLog" />
+                <ScalarProperty Name="CurrentCycleRemindercount" ColumnName="CurrentCycleRemindercount" />
+                <ScalarProperty Name="SubscriptionID" ColumnName="SubscriptionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Report_BankStatement3" FunctionName="AprosysAccountingModel1.Store.Report_BankStatement3">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_BankStatement3_Result">
+                <ScalarProperty Name="GlId" ColumnName="GlId" />
+				<ScalarProperty Name="TranId" ColumnName="TranId" />
+				<ScalarProperty Name="TranTypeId" ColumnName="TranTypeId" />
+				<ScalarProperty Name="CoaId" ColumnName="CoaId" />
+				<ScalarProperty Name="Credit" ColumnName="Credit" />
+				<ScalarProperty Name="Debit" ColumnName="Debit" />
+				<ScalarProperty Name="ActivityTimeStamp" ColumnName="ActivityTimeStamp" />
+				<ScalarProperty Name="LastName" ColumnName="LastName" />
+				<ScalarProperty Name="FirstName" ColumnName="FirstName" />
+				<ScalarProperty Name="Comments" ColumnName="Comments" />
+				<ScalarProperty Name="AccountName" ColumnName="AccountName" />
+				<ScalarProperty Name="Balance" ColumnName="Balance" />
+                
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Acc_PartialCredit">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Acc_PartialCredit">
+              <MappingFragment StoreEntitySet="Acc_PartialCredit">
+                <ScalarProperty Name="AddedBy" ColumnName="AddedBy" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="InvoiceNum" ColumnName="InvoiceNum" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscriptions">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Subscription">
+              <MappingFragment StoreEntitySet="Subscription">
+                <ScalarProperty Name="SubStatus" ColumnName="SubStatus" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="SubscriptionAmount" ColumnName="SubscriptionAmount" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubscriptionExcludingDates">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.SubscriptionExcludingDate">
+              <MappingFragment StoreEntitySet="SubscriptionExcludingDates">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SubDisableEndDate" ColumnName="SubDisableEndDate" />
+                <ScalarProperty Name="SubDisableStartDate" ColumnName="SubDisableStartDate" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Report_WeeklyCashFlow" FunctionName="AprosysAccountingModel1.Store.Report_WeeklyCashFlow">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_WeeklyCashFlow_Result">
+                <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="MON" ColumnName="MON" />
+                <ScalarProperty Name="TUE" ColumnName="TUE" />
+                <ScalarProperty Name="WED" ColumnName="WED" />
+                <ScalarProperty Name="THU" ColumnName="THU" />
+                <ScalarProperty Name="FRI" ColumnName="FRI" />
+                <ScalarProperty Name="SAT" ColumnName="SAT" />
+                <ScalarProperty Name="SUN" ColumnName="SUN" />
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+                <ScalarProperty Name="TYPED" ColumnName="TYPED" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="MonDate" ColumnName="MonDate" />
+                <ScalarProperty Name="TueDate" ColumnName="TueDate" />
+                <ScalarProperty Name="WedDate" ColumnName="WedDate" />
+                <ScalarProperty Name="ThuDate" ColumnName="ThuDate" />
+                <ScalarProperty Name="FriDate" ColumnName="FriDate" />
+                <ScalarProperty Name="SatDate" ColumnName="SatDate" />
+                <ScalarProperty Name="SunDate" ColumnName="SunDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_MonthlySubscription" FunctionName="AprosysAccountingModel1.Store.Report_MonthlySubscription">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_MonthlySubscription_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="SubscriptionAmount" ColumnName="SubscriptionAmount" />
+                <ScalarProperty Name="JANDUE" ColumnName="JANDUE" />
+                <ScalarProperty Name="JANPAID" ColumnName="JANPAID" />
+                <ScalarProperty Name="FEBDUE" ColumnName="FEBDUE" />
+                <ScalarProperty Name="FEBPAID" ColumnName="FEBPAID" />
+                <ScalarProperty Name="MARDUE" ColumnName="MARDUE" />
+                <ScalarProperty Name="MARPAID" ColumnName="MARPAID" />
+                <ScalarProperty Name="APRDUE" ColumnName="APRDUE" />
+                <ScalarProperty Name="APRPAID" ColumnName="APRPAID" />
+                <ScalarProperty Name="MAYDUE" ColumnName="MAYDUE" />
+                <ScalarProperty Name="MAYPAID" ColumnName="MAYPAID" />
+                <ScalarProperty Name="JUNDUE" ColumnName="JUNDUE" />
+                <ScalarProperty Name="JUNPAID" ColumnName="JUNPAID" />
+                <ScalarProperty Name="JULDUE" ColumnName="JULDUE" />
+                <ScalarProperty Name="JULPAID" ColumnName="JULPAID" />
+                <ScalarProperty Name="AUGDUE" ColumnName="AUGDUE" />
+                <ScalarProperty Name="AUGPAID" ColumnName="AUGPAID" />
+                <ScalarProperty Name="SEPDUE" ColumnName="SEPDUE" />
+                <ScalarProperty Name="SEPPAID" ColumnName="SEPPAID" />
+                <ScalarProperty Name="OCTDUE" ColumnName="OCTDUE" />
+                <ScalarProperty Name="OCTPAID" ColumnName="OCTPAID" />
+                <ScalarProperty Name="NOVDUE" ColumnName="NOVDUE" />
+                <ScalarProperty Name="NOVPAID" ColumnName="NOVPAID" />
+                <ScalarProperty Name="DECDUE" ColumnName="DECDUE" />
+                <ScalarProperty Name="DECPAID" ColumnName="DECPAID" />
+                <ScalarProperty Name="TOTDUE" ColumnName="TOTDUE" />
+                <ScalarProperty Name="TOTPAID" ColumnName="TOTPAID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSubscriptionList" FunctionName="AprosysAccountingModel1.Store.GetSubscriptionList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.GetSubscriptionList_Result">
+                <ScalarProperty Name="subid" ColumnName="subid" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="SubscriptionAmount" ColumnName="SubscriptionAmount" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="SubStatus" ColumnName="SubStatus" />
+                <ScalarProperty Name="SubDisableStartDate" ColumnName="SubDisableStartDate" />
+                <ScalarProperty Name="SubDisableEndDate" ColumnName="SubDisableEndDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetSubDuesofCustomer" FunctionName="AprosysAccountingModel1.Store.usp_GetSubDuesofCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.usp_GetSubDuesofCustomer_Result">
+                <ScalarProperty Name="TranId" ColumnName="TranId" />
+                <ScalarProperty Name="SubscriptionDueDate" ColumnName="SubscriptionDueDate" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="Debit" ColumnName="Debit" />
+                <ScalarProperty Name="AllDueBefore" ColumnName="AllDueBefore" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetTotalPaidofCustomer" FunctionName="AprosysAccountingModel1.Store.usp_GetTotalPaidofCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.usp_GetTotalPaidofCustomer_Result">
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="TotPaid" ColumnName="TotPaid" />
+                <ScalarProperty Name="LastPaid" ColumnName="LastPaid" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tblinvoices">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.tblinvoice">
+              <MappingFragment StoreEntitySet="tblinvoice">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="NTN" ColumnName="NTN" />
+                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="SalesPersonId" ColumnName="SalesPersonId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Misc" ColumnName="Misc" />
+                <ScalarProperty Name="OpeningBalance" ColumnName="OpeningBalance" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesPersons">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.SalesPerson">
+              <MappingFragment StoreEntitySet="SalesPerson">
+                <ScalarProperty Name="NTN" ColumnName="NTN" />
+                <ScalarProperty Name="CNIC" ColumnName="CNIC" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Misc" ColumnName="Misc" />
+                <ScalarProperty Name="OpeningBalance" ColumnName="OpeningBalance" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Acc_GL">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Acc_GL">
+              <MappingFragment StoreEntitySet="Acc_GL">
+                <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+                <ScalarProperty Name="SalesPersonId" ColumnName="SalesPersonId" />
+                <ScalarProperty Name="CreditPaidDate" ColumnName="CreditPaidDate" />
+                <ScalarProperty Name="IsSalesCredit" ColumnName="IsSalesCredit" />
+                <ScalarProperty Name="SubscriptionDueDate" ColumnName="SubscriptionDueDate" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsPostpaid" ColumnName="IsPostpaid" />
+                <ScalarProperty Name="Misc" ColumnName="Misc" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="ActivityTimestamp" ColumnName="ActivityTimestamp" />
+                <ScalarProperty Name="Debit" ColumnName="Debit" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="FiscarlYear" ColumnName="FiscarlYear" />
+                <ScalarProperty Name="IsGift" ColumnName="IsGift" />
+                <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
+                <ScalarProperty Name="QuantityBalance" ColumnName="QuantityBalance" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CoaId" ColumnName="CoaId" />
+                <ScalarProperty Name="TranTypeId" ColumnName="TranTypeId" />
+                <ScalarProperty Name="TranId" ColumnName="TranId" />
+                <ScalarProperty Name="GlId" ColumnName="GlId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblBanks">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.tblBank">
+              <MappingFragment StoreEntitySet="tblBanks">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OilGrades">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.OilGrade">
+              <MappingFragment StoreEntitySet="OilGrade">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OilGade" ColumnName="OilGade" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="AprosysAccountingModel1.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="OilGradeId" ColumnName="OilGradeId" />
+                <ScalarProperty Name="QuantityInCarton" ColumnName="QuantityInCarton" />
+                <ScalarProperty Name="PackingInLitre" ColumnName="PackingInLitre" />
+                <ScalarProperty Name="IsTaxable" ColumnName="IsTaxable" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SellPrice" ColumnName="SellPrice" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
+                <ScalarProperty Name="MinQty" ColumnName="MinQty" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="ItemTypeId" ColumnName="ItemTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Report_ItemWiseSale" FunctionName="AprosysAccountingModel1.Store.Report_ItemWiseSale">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_ItemWiseSale_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="PurchRate" ColumnName="PurchRate" />
+                <ScalarProperty Name="SaleRate" ColumnName="SaleRate" />
+                <ScalarProperty Name="SaleIncTax" ColumnName="SaleIncTax" />
+                <ScalarProperty Name="NetSale" ColumnName="NetSale" />
+                <ScalarProperty Name="TaxToPay" ColumnName="TaxToPay" />
+                <ScalarProperty Name="Earnings" ColumnName="Earnings" />
+                <ScalarProperty Name="PackingInLitre" ColumnName="PackingInLitre" />
+                <ScalarProperty Name="QuantityInCarton" ColumnName="QuantityInCarton" />
+                <ScalarProperty Name="OilGade" ColumnName="OilGade" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Report_GetSaleInvoice" FunctionName="AprosysAccountingModel1.Store.Report_GetSaleInvoice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AprosysAccountingModel1.Report_GetSaleInvoice_Result">
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="QuantityInLitre" ColumnName="QuantityInLitre" />
+                <ScalarProperty Name="AmountPerLitre" ColumnName="AmountPerLitre" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+                <ScalarProperty Name="COMMENTS" ColumnName="COMMENTS" />
+                <ScalarProperty Name="ACTTIMESTAMP" ColumnName="ACTTIMESTAMP" />
+                <ScalarProperty Name="TYPED" ColumnName="TYPED" />
+                <ScalarProperty Name="SERVICETYPE" ColumnName="SERVICETYPE" />
+                <ScalarProperty Name="CoaId" ColumnName="CoaId" />
+                <ScalarProperty Name="BALANCE" ColumnName="BALANCE" />
+                <ScalarProperty Name="PAID" ColumnName="PAID" />
+                <ScalarProperty Name="TAX" ColumnName="TAX" />
+                <ScalarProperty Name="CSTNAME" ColumnName="CSTNAME" />
+                <ScalarProperty Name="cstID" ColumnName="cstID" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IsSalesCredit" ColumnName="IsSalesCredit" />
+                <ScalarProperty Name="CreditPaidDate" ColumnName="CreditPaidDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

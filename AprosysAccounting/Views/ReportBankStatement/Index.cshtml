@@ -1,0 +1,57 @@
+﻿
+
+<div style="margin-top:80px">
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2">
+            <select id="ddlBankList" class="form-control" title="Account"> </select>
+
+        </div>
+        <div class="col-sm-3">
+            <label class="col-sm-5">Start</label>
+            <div class="input-group date " data-provide="datepicker">
+                <input type="text" id="dtp_bankStatement_StartDate" class="form-control" readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label class="col-sm-5">End</label>
+            <div class="input-group date " data-provide="datepicker">
+                <input type="text" id="dtp_bankStatement_EndDate" class="form-control" readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <input type="button" class="btn btn-success" id="btn_bankStatement_View" value="VIEW" />
+            <input type="button" class="btn btn-success" id="btn_bankStatement_Download" value="DOWNLOAD" />
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <iframe id="ReportPreview" src="" style="height:75vh;width:100%" frameborder="0"></iframe>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Scripts/custom/Report.js"></script>
+<script src="~/Scripts/custom/BankStatement.js"></script>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        ReportsTrigger();
+        BankStatementTrigger();
+    });
+</script>
+
+

@@ -1,0 +1,17 @@
+alter Table  Item
+Add  PackingInLitre Decimal(10,2)
+
+alter Table  Item
+Add  QuantityInCartan INT
+
+alter table item
+drop column QuantityInCartan
+
+
+alter Table  Item
+Add  QuantityInCarton INT
+
+alter table item
+add OilGradeId INT
+
+

@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+<link href="~/css/plugins/chosen/chosen.css" rel="stylesheet" />
+
+
+
+
+<div class="container" style="margin-top:20px">
+    <h2>Oil Grade Management</h2>
+    <div style="margin-top:80px">
+        <div class="row">
+            <div class="col-sm-10"><input type="hidden" name="TopHdnId" id="top_hdn_id" value="" /></div>
+            <div class="col-sm-2"><input type="button" class="btn btn-primary pull-right add_new_oilGrade" id="add_new_oilGrade" name="name" value="New Oil Grade" /></div>
+        </div>
+        <br />
+    </div>
+    <table id="tblOilGradeInformation" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr class="success">
+                <th class="text-center">Oil Gade</th>
+                @*<th class="text-center">IsActive</th>*@
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="tblactive"></tbody>
+    </table>
+</div>
+<div class="modal fade" id="AddNewGradeRecordModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;margin-right: -32%;margin-top: 5%;">
+    <div class="modal-dialog modal-lg AddNewGradeRecordModal">
+        <div class="modal-content col-xl-11"  style="width: 45%;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Add Oil Grade Record</h4>
+            </div>
+            <div class="modal-body ">
+                  <div class="form-group">
+                      <label>Oil Grade</label>
+                      <input type="tel" name="OilGrade" id="txt_oilgrade" class="form-control txt_oilgrade" maxlength="50" value="" placeholder="Enter Oil Grade" />
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-success" id="btn_oilgrade_Save" value="Save" />
+                <a href="#" class="btn btn-default close" data-dismiss="modal">Close</a>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+<script src="~/Theme/js/jquery.inputpicker.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script src="~/js/plugins/chosen/chosen.jquery.js"></script>
+<script src="~/Scripts/custom/OilGradeManagement.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        OilGradeManagementTrigger();
+    });
+</script>

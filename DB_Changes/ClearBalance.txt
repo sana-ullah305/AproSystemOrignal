@@ -1,0 +1,49 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[usp_GetTotalPaidofCustomer]    Script Date: 07/20/2019 20:01:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE procedure [dbo].[usp_GetTotalPaidofCustomer]
+@CustID INT
+AS
+BEGIN
+declare @CustomerID INT
+set @CustomerID = (Select top 1 CustId from Subscription where id=@CustID);
+select GL.CustId, SUM(GL.[Debit]) AS TotPaid ,max(GL.ActivityTimestamp) as LastPaid from Acc_GL GL
+WHERE GL.[CoaId] = 11 AND GL.[TranTypeId] = 3 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1 AND custid=@CustomerID
+Group by GL.CustId
+END
+
+
+GO
+
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[usp_GetSubDuesofCustomer]    Script Date: 07/20/2019 20:02:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE procedure [dbo].[usp_GetSubDuesofCustomer]
+@CustID INT 
+AS 
+BEGIN 
+declare @CustomerID INT
+set @CustomerID = (Select top 1 CustId from Subscription where id=@CustID);
+SELECT	GL.TranId,GL.SubscriptionDueDate,  GL.CustId,Gl.Debit, SUM(GL2.[Debit]) AS AllDueBefore
+ FROM [Acc_GL] AS GL
+Inner join
+( Select GL.Debit,GL.CustID,GL.SubscriptionDueDate  from Acc_GL GL where 
+GL.[CoaId] = 10 AND GL.[TranTypeId] = 5 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1)
+as GL2
+on GL.SubscriptionDueDate >=GL2.SubscriptionDueDate
+
+AND GL.CustId=GL2.CustId
+WHERE
+GL.[CoaId] = 10 AND GL.[TranTypeId] = 5 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1 AND GL.CustId=@CustomerID
+Group by GL.TranId,GL.Debit,GL.SubscriptionDueDate, GL.CustId
+	
+END
+

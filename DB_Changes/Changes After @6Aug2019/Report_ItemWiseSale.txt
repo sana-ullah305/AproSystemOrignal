@@ -1,0 +1,50 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[Report_ItemWiseSale]    Script Date: 11/13/2019 12:37:43 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[Report_ItemWiseSale]
+(
+	@dtStart datetime,
+	@dtEnd datetime
+)
+AS
+BEGIN
+
+SELECT 
+	TAB2.[ItemId] AS Id, TAB2.[ITEMNAME] AS ItemName, TAB2.[Unit], ISNULL(TAB1.[Qty],0) AS Qty, ISNULL(TAB2.[PurchRate],0) AS PurchRate, ISNULL(TAB1.SaleIncTax,0)/ISNULL(TAB1.[Qty],1) AS SaleRate, ISNULL(TAB1.SaleIncTax,0) AS SaleIncTax, ISNULL(TAB1.NetSale,0) AS NetSale, ISNULL(TAB1.TaxToPay,0) AS TaxToPay,ISNULL(TAB1.[NetSale] -(TAB1.[Qty]*TAB2.[PurchRate]),0) AS Earnings,
+ ISNULL(TAB2.PackingInLitre,0) PackingInLitre,ISNULL(TAB2.QuantityInCarton,0) QuantityInCarton,TAB2.OilGade
+FROM
+(
+
+SELECT
+	SUM(ISNULL(GL.[Quantity],0)) AS Qty, GL.[ItemId], AVG(ISNULL(GL.[UnitPrice],0)) AS SaleRate , SUM(ISNULL(GL.[Credit],0))+SUM(ISNULL(GL.[TaxPercent],0)) AS SaleIncTax,
+	SUM(ISNULL(GL.[Credit],0)) AS NetSale, SUM(ISNULL(GL.[TaxPercent],0)) AS TaxToPay 
+FROM 
+	[Acc_GL] AS GL
+WHERE
+	GL.[TranTypeId] = 2 AND GL.[CoaId] = 14 AND GL.[IsActive] = 1
+	AND (GL.[ActivityTimestamp] >= @dtStart AND GL.[ActivityTimestamp] <= @dtEnd)
+GROUP BY
+	GL.[ItemId]
+)AS TAB1
+RIGHT JOIN
+(
+SELECT
+	IT.[Id] AS ItemId, IT.[Name] AS ITEMNAME, IT.[Unit], AVG(ISNULL(GL.[UnitPrice],IT.[PurchasePrice])) AS PurchRate,  
+	Max(PackingInLitre) PackingInLitre,Max(QuantityInCarton) QuantityInCarton,MAX( oilgrade.OilGade) OilGade
+FROM 
+	[Item] AS IT
+Left JOIN OilGrade oilgrade on IT.OilGradeId=oilgrade.Id AND oilgrade.IsActive=1
+LEFT JOIN [Acc_GL] AS GL ON GL.[ItemId] = IT.[Id] AND GL.[TranTypeId] = 2 AND GL.[CoaId] = 13 AND GL.[IsActive] = 1 
+AND (GL.[ActivityTimestamp] >= @dtStart AND GL.[ActivityTimestamp] <= @dtEnd)
+WHERE
+	IT.[IsActive] = 1
+GROUP BY
+	IT.[Id], IT.[Name], IT.[Unit]
+) AS TAB2
+ON TAB1.ItemId = TAB2.ItemId
+END
+

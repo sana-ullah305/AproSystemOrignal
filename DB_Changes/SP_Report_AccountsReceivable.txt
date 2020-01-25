@@ -1,0 +1,68 @@
+USE [AprosysAccounting_We4do]
+GO
+/****** Object:  StoredProcedure [dbo].[Report_AccountsReceivable]    Script Date: 29/03/2019 11:03:25 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[Report_AccountsReceivable]
+(
+	@custID int,
+	@typeID int
+)
+AS
+BEGIN
+--ISNULL(SUM(CAST(IsSalesCredit AS TINYINT)),0)>0 THEN 
+IF(@typeID=1)
+	BEGIN
+	SELECT
+		 SUM(ISNULL(GL.[Debit],0))  AS AMOUNT,
+		CST.[LastName] + ' '+ CST.[FirstName] AS VENDOR,
+		CASE WHEN CST.[TypeId] = 1 THEN 'Receivables' ELSE 'Subscription' END AS TYPED,GL.InvoiceNo,GL.ActivityTimestamp
+	FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] AND (@typeID = 0 OR CST.[TypeId] = @typeID)
+	WHERE
+	GL.[IsActive] = 1 and IsSalesCredit=1 AND GL.CoaId=11 --AND GL.CoaId = 10
+	AND (@custID = 0 OR GL.[CustId] = @custID)
+	GROUP BY
+	CST.[LastName], CST.[FirstName], CST.[TypeId],Gl.InvoiceNo,GL.ActivityTimestamp
+	END
+
+ELSE
+	BEGIN 
+	SELECT
+		SUM(ISNULL(GL.[Debit],0))-SUM(ISNULL(GL.[Credit],0)) AS AMOUNT,
+		CST.[LastName] + ' '+ CST.[FirstName] AS VENDOR,
+		'Subscription' AS TYPED,max(GL.InvoiceNo) as InvoiceNo,max(GL.ActivityTimestamp) as ActivityTimestamp
+	FROM
+	[Acc_GL] AS GL
+	INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]  AND GL.IsActive =1 AND CST.IsActive =1
+	INNER JOIN [Subscription] AS SUBS ON SUBS.CustId=CST.Id AND SUBS.IsActive=1
+
+	WHERE
+	GL.[IsActive] = 1 AND GL.CoaId = 10
+	AND (@custID = 0 OR GL.[CustId] = @custID)
+	GROUP BY
+	CST.[LastName], CST.[FirstName]
+	END
+
+END
+
+--ELSE
+--BEGIN 
+--SELECT
+--	SUM(ISNULL(GL.[Debit],0))-SUM(ISNULL(GL.[Credit],0)) AS AMOUNT,
+--	CST.[LastName] + ' '+ CST.[FirstName] AS VENDOR,
+--	'Subscription'  AS TYPED
+--FROM
+--[Acc_GL] AS GL
+--INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] --AND (@typeID = 0 OR CST.[TypeId] = @typeID)
+--WHERE
+--GL.[IsActive] = 1 AND GL.CoaId = 10
+--AND (@custID = 0 OR GL.[CustId] = @custID)
+--GROUP BY
+--CST.[LastName], CST.[FirstName]--, CST.[TypeId]
+--END
+
+--END

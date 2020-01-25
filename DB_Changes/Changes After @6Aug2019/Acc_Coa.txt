@@ -1,0 +1,10 @@
+SET Identity_Insert [Acc_COA]  ON;
+INSERT INTO [dbo].[Acc_COA](CoaId ,[PId],[CoaNo],[HeadAccount],[TreeName],[CoaLevel],[OpeningBalance],[IsActive],[Cost],[ServiceCode])
+VALUES(25,	0,	NULL,	5,	'Bonus Revenue',	1,	0.00,	1,	0.00,	0)
+SET Identity_Insert [Acc_COA] Off;
+
+INSERT INTO [dbo].[Acc_COA]([PId],[CoaNo],[HeadAccount],[TreeName],[CoaLevel],[OpeningBalance],[IsActive],[Cost],[ServiceCode])
+VALUES(	25,	NULL,	5,	'Vendor1 Bonus',	2,	0.00	,1,	0.00,	0)
+
+INSERT INTO [dbo].[Acc_COA]([PId],[CoaNo],[HeadAccount],[TreeName],[CoaLevel],[OpeningBalance],[IsActive],[Cost],[ServiceCode])
+VALUES(25,	NULL,	5,	'Vendor2 Bonus',	2,	0.00	,1	,0.00,	0)

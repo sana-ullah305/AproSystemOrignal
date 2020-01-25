@@ -1,0 +1,246 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[Report_MonthlySubscription]    Script Date: 7/30/2019 6:26:05 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[Report_MonthlySubscription]
+(
+	@year int ,
+	@SubsType int /*0=without suspended , 1=suspended*/
+)
+AS
+BEGIN
+--declare	@year int
+--set @year =2019
+--SELECT distinct  c.Id,c.FirstName,2 'DueDate',3.0 'SubscriptionAmount',1.0 'JANDUE',0.9 'JANPAID',1.0 'FEBDUE',0.9 'FEBPAID' ,1.0 'MARDUE',1.0 'MARPAID',1.0 'APRDUE',1.0 'APRPAID',1.0 'MAYDUE',1.0 'MAYPAID',1.0 'JUNDUE',1.0 'JUNPAID',1.0 'JULDUE',1.0 'JULPAID',1.0 'AUGDUE',1.0 'AUGPAID',1.0 'SEPDUE',1.0 'SEPPAID',1.0 'OCTDUE',1.0 'OCTPAID',1.0 'NOVDUE',1.0 'NOVPAID',1.0 'DECDUE',1.0 'DECPAID',1.0 'TOTDUE',1.0 'TOTPAID' From Acc_GL GL
+--inner join Customer C on GL.custid=C.id
+----left join Acc_GL GL on #temp.id=GL.CustId
+--where c.IsActive =1 OR (c.IsActive =0 AND (GL.CustId)>0 AND GL.IsActive=1 AND GL.TranTypeId =3) 
+
+CREATE TABLE #temp (Id int, FirstName VARCHAR(100),DueDate int,SubscriptionAmount decimal(10,2),JANDUE decimal(10,2),JANPAID decimal(10,2),FEBDUE decimal(10,2),FEBPAID decimal(10,2),MARDUE decimal(10,2),MARPAID decimal(10,2),APRDUE decimal(10,2),APRPAID decimal(10,2),MAYDUE decimal(10,2), MAYPAID decimal(10,2),JUNDUE decimal(10,2), JUNPAID decimal(10,2),JULDUE decimal(10,2),JULPAID decimal(10,2),AUGDUE decimal(10,2), AUGPAID decimal(10,2),SEPDUE decimal(10,2),SEPPAID decimal(10,2),OCTDUE decimal(10,2),OCTPAID decimal(10,2),NOVDUE decimal(10,2),NOVPAID decimal(10,2),DECDUE decimal(10,2),DECPAID decimal(10,2),TOTDUE decimal(10,2),TOTPAID decimal(10,2))
+
+
+SELECT
+	
+	
+	 GL.CustId, SUM(GL.[Debit]) AS TotPaid ,max(GL.ActivityTimestamp) as LastPaid
+	into #tbllastPaid
+FROM 
+	[Acc_GL] AS GL
+
+WHERE
+	GL.[CoaId] = 11 AND GL.[TranTypeId] = 3 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1
+
+	Group by GL.CustId
+
+	
+SELECT
+	
+	
+	GL.TranId,GL.SubscriptionDueDate,  GL.CustId,Gl.Debit, SUM(GL2.[Debit]) AS AllDueBefore
+
+	into #tblAllDue
+FROM 
+	[Acc_GL] AS GL
+
+
+Inner join
+( Select GL.Debit,GL.CustID,GL.SubscriptionDueDate  from Acc_GL GL where 
+GL.[CoaId] = 10 AND GL.[TranTypeId] = 5 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1)
+as GL2
+on GL.SubscriptionDueDate >=GL2.SubscriptionDueDate
+
+AND GL.CustId=GL2.CustId
+WHERE
+	GL.[CoaId] = 10 AND GL.[TranTypeId] = 5 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1
+
+	Group by GL.TranId,GL.Debit,GL.SubscriptionDueDate, GL.CustId
+	
+
+Select #tblAllDue.CustId, (Case WHEN AllDueBefore<=TotPaid then Debit
+WHEN (ALLDueBefore-Debit)<TotPaid
+Then
+(TotPaid-(ALLDueBefore-Debit))
+ else 0 END) as Debit,SubscriptionDueDate
+into #paidOnDue
+   from #tblAllDue
+inner join #tbllastPaid
+on #tblAllDue.CustId=#tbllastPaid.CustId
+
+
+Select *  Into #paidGL  from (
+Select #paidOnDue.custID,#paidOnDue.Debit,#paidOnDue.SubscriptionDueDate as ActivityTimeStamp from #paidOnDue
+Union
+Select #tbllastPaid.CustId, coalesce(MAX(#tbllastPaid.TotPaid),0)-coalesce(sum(#paidOnDue.Debit),0) as Debit,max(#tbllastPaid.LastPaid) as ActivityTimeStamp  from #tbllastPaid
+left join
+#paidOnDue
+on #tbllastPaid.CustId=#paidOnDue.CustId
+group by #tbllastPaid.CustId
+) as t
+
+
+Select 
+	#tblAllDue.CustId,
+	(
+	Case When
+	(#tblAllDue.AllDueBefore-coalesce(#tbllastPaid.TotPaid,0))<=0 Then 0
+	
+	ELSe
+	(#tblAllDue.AllDueBefore-coalesce(#tbllastPaid.TotPaid,0))
+	End) as Debit
+	,#tblAllDue.SubscriptionDueDate
+	into #dueGL from #tblAllDue
+	left join #tbllastPaid
+	on #tblAllDue.CustId=#tbllastPaid.CustId
+	
+
+
+INSERT INTO #temp
+SELECT
+	CST.[Id] , CST.[lastName] + ' '+CST.[FirstName] AS FirstName,
+	SUBS.DueDate,SUBS.SubscriptionAmount,ISNULL(SUM(TBLDUE.[JAN]),0) AS JANDUE, ISNULL(SUM(TBLPAID.[JAN]),0) AS JANPAID, 
+	ISNULL(SUM(TBLDUE.FEB),0) AS FEBDUE, ISNULL(SUM(TBLPAID.[FEB]),0) AS FEBPAID,
+	ISNULL(SUM(TBLDUE.[MAR]),0) AS MARDUE, ISNULL(SUM(TBLPAID.[MAR]),0) AS MARPAID,
+	ISNULL(SUM(TBLDUE.[APR]),0) AS APRDUE, ISNULL(SUM(TBLPAID.[APR]),0) AS APRPAID,
+	ISNULL(SUM(TBLDUE.[MAY]),0) AS MAYDUE, ISNULL(SUM(TBLPAID.[MAY]),0) AS MAYPAID,
+	ISNULL(SUM(TBLDUE.[JUN]),0) AS JUNDUE, ISNULL(SUM(TBLPAID.[JUN]),0) AS JUNPAID,
+	ISNULL(SUM(TBLDUE.[JUL]),0) AS JULDUE, ISNULL(SUM(TBLPAID.[JUL]),0) AS JULPAID,
+	ISNULL(SUM(TBLDUE.[AUG]),0) AS AUGDUE, ISNULL(SUM(TBLPAID.[AUG]),0) AS AUGPAID,
+	ISNULL(SUM(TBLDUE.[SEP]),0) AS SEPDUE, ISNULL(SUM(TBLPAID.[SEP]),0) AS SEPPAID,
+	ISNULL(SUM(TBLDUE.[OCT]),0) AS OCTDUE, ISNULL(SUM(TBLPAID.[OCT]),0) AS OCTPAID,
+	ISNULL(SUM(TBLDUE.[NOV]),0) AS NOVDUE, ISNULL(SUM(TBLPAID.[NOV]),0) AS NOVPAID,
+	ISNULL(SUM(TBLDUE.[DEC]),0) AS DECDUE, ISNULL(SUM(TBLPAID.[DEC]),0) AS DECPAID,
+	ISNULL(SUM(TBLDUE.[TOTDUE]),0) AS TOTDUE, ISNULL(SUM(TBLPAID.[TOTPAID]),0) AS TOTPAID
+
+FROM
+(
+SELECT 
+	'PAID' AS TYPED, SUBDUE.[Id] ,SUBDUE.FirstName,
+	ISNULL(SUM(SUBDUE.[JAN]),0) AS [JAN],
+	ISNULL(SUM(SUBDUE.[FEB] ),0) AS [FEB],
+	ISNULL(SUM(SUBDUE.MAR),0) AS MAR,
+	ISNULL(SUM(SUBDUE.APR),0) AS APR,
+	ISNULL(SUM(SUBDUE.MAY),0) AS MAY,
+	ISNULL(SUM(SUBDUE.JUN),0) AS JUN,
+	ISNULL(SUM(SUBDUE.JUL),0) AS JUL,
+	ISNULL(SUM(SUBDUE.AUG),0) AS AUG,
+	ISNULL(SUM(SUBDUE.SEP),0) AS SEP,
+	ISNULL(SUM(SUBDUE.OCT),0) AS OCT,
+	ISNULL(SUM(SUBDUE.NOV),0) AS NOV,
+	ISNULL(SUM(SUBDUE.[DEC]),0) AS [DEC],
+	ISNULL(SUM(SUBDUE.TOTPAID),0) AS TOTPAID
+FROM
+	(
+
+SELECT
+	'PAID' AS TYPED, 
+	CST.[Id] ,CST.[FirstName],--SUBS.DueDate,SUBS.SubscriptionAmount, 
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =1 THEN SUM(GL.[Debit]) ELSE 0 END AS 'JAN' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =2 THEN SUM(GL.[Debit]) ELSE 0 END AS 'FEB' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =3 THEN SUM(GL.[Debit]) ELSE 0 END AS 'MAR' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =4 THEN SUM(GL.[Debit]) ELSE 0 END AS 'APR' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =5 THEN SUM(GL.[Debit]) ELSE 0 END AS 'MAY' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =6 THEN SUM(GL.[Debit]) ELSE 0 END AS 'JUN' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =7 THEN SUM(GL.[Debit]) ELSE 0 END AS 'JUL' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =8 THEN SUM(GL.[Debit]) ELSE 0 END AS 'AUG' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =9 THEN SUM(GL.[Debit]) ELSE 0 END AS 'SEP' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =10 THEN SUM(GL.[Debit]) ELSE 0 END AS 'OCT' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =11 THEN SUM(GL.[Debit]) ELSE 0 END AS 'NOV' ,
+	CASE WHEN DATEPART(MONTH,GL.[ActivityTimestamp]) =12 THEN SUM(GL.[Debit]) ELSE 0 END AS 'DEC',
+	SUM(GL.[Debit]) AS TOTPAID
+FROM 
+	#paidGL AS GL
+INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] AND CST.IsActive =1 --AND CST.[TypeId] = 2
+INNER JOIN [Subscription] AS SUBS ON SUBS.CustId=CST.Id AND SUBS.IsActive=1
+WHERE
+--	GL.[CoaId] = 11 AND GL.[TranTypeId] = 3 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1 AND
+	 DATEPART(YEAR,GL.[ActivityTimestamp]) = @year
+GROUP BY
+	CST.[Id] ,CST.[FirstName],DATEPART(MONTH,GL.[ActivityTimestamp])
+) AS SUBDUE
+GROUP BY
+SUBDUE.[Id] ,SUBDUE.FirstName
+) AS TBLPAID
+RIGHT JOIN
+(
+SELECT 
+	'DUE' AS TYPED, SUBDUE.[Id] ,SUBDUE.FirstName,
+	ISNULL(SUM(SUBDUE.[JAN]),0) AS [JAN],
+	ISNULL(SUM(SUBDUE.[FEB] ),0) AS [FEB],
+	ISNULL(SUM(SUBDUE.MAR),0) AS MAR,
+	ISNULL(SUM(SUBDUE.APR),0) AS APR,
+	ISNULL(SUM(SUBDUE.MAY),0) AS MAY,
+	ISNULL(SUM(SUBDUE.JUN),0) AS JUN,
+	ISNULL(SUM(SUBDUE.JUL),0) AS JUL,
+	ISNULL(SUM(SUBDUE.AUG),0) AS AUG,
+	ISNULL(SUM(SUBDUE.SEP),0) AS SEP,
+	ISNULL(SUM(SUBDUE.OCT),0) AS OCT,
+	ISNULL(SUM(SUBDUE.NOV),0) AS NOV,
+	ISNULL(SUM(SUBDUE.[DEC]),0) AS [DEC],
+	ISNULL(SUM(SUBDUE.TOTDUE),0) AS TOTDUE
+FROM
+	(
+SELECT
+	
+	CST.[Id] ,CST.[LastName]+' '+CST.[FirstName] AS FirstName,--SUBS.DueDate,SUBS.SubscriptionAmount, 
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =1 THEN SUM(GL.[Debit]) ELSE 0 END AS 'JAN' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =2 THEN SUM(GL.[Debit]) ELSE 0 END AS 'FEB' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =3 THEN SUM(GL.[Debit]) ELSE 0 END AS 'MAR' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =4 THEN SUM(GL.[Debit]) ELSE 0 END AS 'APR' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =5 THEN SUM(GL.[Debit]) ELSE 0 END AS 'MAY' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =6 THEN SUM(GL.[Debit]) ELSE 0 END AS 'JUN' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =7 THEN SUM(GL.[Debit]) ELSE 0 END AS 'JUL' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =8 THEN SUM(GL.[Debit]) ELSE 0 END AS 'AUG' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =9 THEN SUM(GL.[Debit]) ELSE 0 END AS 'SEP' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =10 THEN SUM(GL.[Debit]) ELSE 0 END AS 'OCT' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =11 THEN SUM(GL.[Debit]) ELSE 0 END AS 'NOV' ,
+	CASE WHEN DATEPART(MONTH,GL.[SubscriptionDueDate]) =12 THEN SUM(GL.[Debit]) ELSE 0 END AS 'DEC',
+	SUM(GL.[Debit]) AS TOTDUE
+FROM 
+	#dueGL AS GL
+INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId] AND CST.IsActive =1 --AND CST.[TypeId] = 2
+INNER JOIN [Subscription] AS SUBS ON SUBS.CustId=CST.Id AND SUBS.IsActive=1
+WHERE
+	--GL.[CoaId] = 10 AND GL.[TranTypeId] = 5 AND GL.[IsPostpaid] = 1 AND GL.[IsActive] = 1
+	 DATEPART(YEAR,GL.[SubscriptionDueDate]) = @year
+GROUP BY
+	CST.[Id] ,CST.[FirstName],CST.[LastName],DATEPART(MONTH,GL.[SubscriptionDueDate])
+	
+
+) AS SUBDUE
+GROUP BY
+SUBDUE.[Id] ,SUBDUE.FirstName
+) AS TBLDUE
+ON TBLPAID.[Id] = TBLDUE.[Id] 
+RIGHT JOIN [Customer] AS CST ON CST.[Id] = TBLDUE.[Id] AND  CST.IsActive =1--AND CST.[TypeId]= 2
+INNER JOIN [Subscription] AS SUBS ON SUBS.[CustId] = CST.[Id] AND SUBS.IsActive =1
+GROUP BY
+	CST.[Id] ,CST.[FirstName] ,CST.[LastName],SUBS.DueDate,SUBS.SubscriptionAmount
+
+IF(@SubsType=0)
+BEGIN
+SELECT distinct  #temp.Id,#temp.FirstName,#temp.DueDate,#temp.SubscriptionAmount,#temp.JANDUE,#temp.JANPAID,#temp.FEBDUE,#temp.FEBPAID ,#temp.MARDUE,#temp.MARPAID,#temp.APRDUE,#temp.APRPAID,#temp.MAYDUE,#temp.MAYPAID,#temp.JUNDUE,#temp.JUNPAID,#temp.JULDUE,#temp.JULPAID,#temp.AUGDUE,#temp.AUGPAID,#temp.SEPDUE,#temp.SEPPAID,#temp.OCTDUE,#temp.OCTPAID,#temp.NOVDUE,#temp.NOVPAID,#temp.DECDUE,#temp.DECPAID,#temp.TOTDUE,#temp.TOTPAID From #temp 
+inner join Customer C on #temp .Id=C.id
+left join Acc_GL GL on #temp.id=GL.CustId
+INNER JOIN Subscription S on C.Id=S.CustId
+where (c.IsActive =1 OR (c.IsActive =0 AND (GL.CustId)>0 AND GL.IsActive=1 AND GL.TranTypeId =3))
+AND ISNULL(S.SubStatus,0) =0
+END
+ELSE
+BEGIN
+SELECT distinct  #temp.Id,#temp.FirstName,#temp.DueDate,#temp.SubscriptionAmount,#temp.JANDUE,#temp.JANPAID,#temp.FEBDUE,#temp.FEBPAID ,#temp.MARDUE,#temp.MARPAID,#temp.APRDUE,#temp.APRPAID,#temp.MAYDUE,#temp.MAYPAID,#temp.JUNDUE,#temp.JUNPAID,#temp.JULDUE,#temp.JULPAID,#temp.AUGDUE,#temp.AUGPAID,#temp.SEPDUE,#temp.SEPPAID,#temp.OCTDUE,#temp.OCTPAID,#temp.NOVDUE,#temp.NOVPAID,#temp.DECDUE,#temp.DECPAID,#temp.TOTDUE,#temp.TOTPAID From #temp 
+inner join Customer C on #temp .Id=C.id
+left join Acc_GL GL on #temp.id=GL.CustId
+INNER JOIN Subscription S on C.Id=S.CustId
+where (c.IsActive =1 OR (c.IsActive =0 AND (GL.CustId)>0 AND GL.IsActive=1 AND GL.TranTypeId =3))
+AND ISNULL(S.SubStatus,0) =1
+--INNER JOIN Subscription Sub ON SED.CustId=Sub.Id
+--INNER JOIN Customer Cus ON Cus.Id=Sub.CustId)
+END
+
+drop table #temp
+
+END
+

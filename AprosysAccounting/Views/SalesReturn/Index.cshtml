@@ -1,0 +1,193 @@
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Theme/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<link href="~/css/custom/SharedStyles.css" rel="stylesheet" />
+<link href="~/css/plugins/chosen/chosen.css" rel="stylesheet" />
+
+<div class="container">
+    <h2>Sales Return</h2>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-md-6">
+            <label>Sales Invoice/Order#</label>
+            <select class="form-control ddl_sale_invoices" id="ddl_sale_invoices"></select>
+        </div>
+        <div class="col-sm-3"></div>
+    </div> <br /><br />
+    <div class="row">
+        <div class="col-sm-2">
+            <label>Invoice #</label>
+            <input type="text" class="form-control" id="txt_sell_InvoiceNo" value="xxxxxxxx" readonly />
+        </div>
+        <div class="col-sm-3">
+            <label>Date</label>
+            <div class="input-group datetimepker">
+                <input type="text" class="form-control datetimepker linkToDatePermission" readonly id="dtp_sell_ActivityDate">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label>Sales Return Person</label>
+            <select class="form-control dd_sell_sales_person" readonly id="dd_sell_sales_person">
+                <option value="0" selected></option>
+
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <label>Customer</label>
+            <select class="form-control ddl_sell_Customer" readonly disabled id="dd_sell_Customer">
+                <option value="0" disabled>--Select--</option>
+            </select>
+        </div>
+        <div class="col-sm-1" style="margin-top: 1.9%;">
+            <label>Credit</label>
+            <input class="form-check-input" type="checkbox" id="chk_Sale_customer_IsSalesCredit">
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-5" style="">
+            <div id="txt_CreditPaymentNote"></div>
+        </div>
+        <div class="col-sm-6" style="text-align:right">
+            @* <input type="button" class="btn btn-success ClearSalescontrols" value="Clear" />*@
+        </div>
+        <div class="col-sm-1" style="text-align:right">
+            <input type="button" class="btn btn-success AllSalesReturn" value="Return All" />
+        </div>
+    </div>
+
+    <br />
+    <table id="tblSalesReturnInformation" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center success">Code</th>
+                <th class="text-center success">Item</th>
+                <th class="text-center success">Unit</th>
+                <th class="text-center success">Qty</th>
+                <th class="text-center success">Price</th>
+                <th class="text-center success">Tax</th>
+                <th class="text-center success">Amount</th>
+                <th class="text-center success">Action</th>
+            </tr>
+        </thead>
+        <tbody class="tblSalesReturn"></tbody>
+
+    </table>
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-1" style="text-align:right;padding :0px;">
+            <label> Comments : </label>
+        </div>
+        <div class="col-sm-11">
+            <input type="text" class="form-control" id="txt_sell_Comments" maxlength="250" />
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-sm-1" style="text-align:right;padding:0px;">
+            <label>Net Amount</label>
+        </div>
+        <div class="col-sm-2">
+            <div class="currencyInputWrap">
+                <input type="text" class="form-control CurrencyFormatting StopPasting NetAmount" id="txt_sell_NetAmount" readonly />
+            </div>
+        </div>
+        <div class="col-sm-1" style="text-align:right;padding:0px;">
+            <label>Net Tax</label>
+        </div>
+        <div class="col-sm-2">
+            <div class="currencyInputWrap">
+                <input type="text" class="form-control CurrencyFormatting StopPasting" id="txt_sell_NetTaxAmount" readonly />
+            </div>
+        </div>
+        <div class="col-sm-1" style="text-align:right;padding:0px;">
+            <label>Paid</label>
+        </div>
+        <div class="col-sm-2">
+            <div class="currencyInputWrap">
+                <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting paid" min="0" id="txt_sell_PaidAmount" oninput="validity.valid||(value='');" maxlength="13" />
+            </div>
+        </div>
+        <div class="col-sm-1" style="text-align:right;padding:0px">
+            <label>Balance</label>
+        </div>
+        <div class="col-sm-2">
+            <div class="currencyInputWrap">
+                <input type="text" class="form-control CurrencyFormatting StopPasting balance" id="txt_sell_Balance" readonly />
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="NewSalesReturnModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog NewSalesReturnModal" style="width: 39%; margin-left: 22%;margin-left: 29%;margin-top: 7% ">
+            <div class="modal-content col-xs-12">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>*@
+                    <h4 class="modal-title" id="title_sales_customer">Sales Return</h4>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Invoice #</label>
+                            <input type="text" class="form-control" id="txt_sell_return_InvoiceNo" value="xxxxxxxx" readonly />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Item Code</label>
+                            <input type="text" class="form-control txtItemCode" id="txtItemCode" maxlength="50" readonly />
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Item Name</label>
+                            <input type="text" class="form-control" name="ItemName" readonly id="item_name" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Quantity</label>
+                            <input type="number" min="0" class="form-control StopPasting" oninput="validity.valid||(value='');" id="txt_return_quantity" max="9999" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <input class="form-control" type="text" name="Comments" id="return_reason_comments" maxlength="255" placeholder="Sales Return Reason Comments" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-success" id="btnSalesReturn" value="Save" />
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/Theme/js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="~/Theme/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/typehead/bootstrap3-typeahead.min.js"></script>
+<script src="~/Theme/js/jquery.inputpicker.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script src="~/js/plugins/chosen/chosen.jquery.js"></script>
+<script src="~/Scripts/custom/SalesReturn.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        SalesReturnTrigger();
+    });
+</script>

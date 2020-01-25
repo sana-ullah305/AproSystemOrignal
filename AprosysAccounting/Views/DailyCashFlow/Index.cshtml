@@ -1,0 +1,273 @@
+﻿
+
+<link href="~/css/custom/DailyCashFlow.css" rel="stylesheet" />
+<link href="~/Theme/css/plugins/toastr/toastr.min.css" rel="stylesheet" />
+<div class="container" id="purchaseListReportDiv" style="margin-top:20px">
+
+    <h3>Daily Cash Flow</h3>
+    <br />
+    <div class="row">
+        <div class="col-sm-1 text-right">
+            <label>Date</label>
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group date " data-provide="datepicker">
+                <input type="text" id="dcf_CurrDate" class="form-control" readonly>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+        </div>
+       
+        <div class="col-sm-3">
+            <input type="button" class="btn btn-success" id="btnProceed" value="PROCEED" />
+        </div>
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-2">
+            <input type="button" class="btn btn-success" id="btn_dailyCashFlow_download" value="Download" />
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div class="cashFlowContainer">
+        <div class="row" id="divOpening">
+            <div class="col-xs-2" style="border: solid 0.5px; border-left: none; border-right: none; border-top: none;">
+                <h2 id="lblDay"></h2>
+            </div>
+            <div class="col-xs-2" style="border: solid 0.5px; border-left: none;  border-right: none;  border-top: none;">
+                <h2 id="lblOpening" class="text-right"></h2>
+            </div>
+            <div class="col-xs-2"></div>
+
+            <div class="col-xs-6"></div>
+
+        </div>
+        <br />
+        <div class="row">
+            <table class="table table-bordered" id="tblssm">
+                <thead>
+                    <tr>
+                        <th class="col-xs-4 font-weight-bold">Description</th>
+                        <th class="col-xs-4 font-weight-bold">Type</th>
+                        <th class="col-xs-1 font-weight-bold text-right">Qty</th>
+                        <th class="col-xs-1 font-weight-bold text-right">Price</th>
+                        <th class="col-xs-1 font-weight-bold text-right">Total</th>
+                        <th class="col-xs-1 font-weight-bold text-right">Taxes</th>
+                    </tr>
+                </thead>
+                <tbody class="bodySSM"></tbody>
+                <tfoot>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Totals</td>
+                        <td class="col-xs-4"></td>
+                        <td class="col-xs-1 font-weight-bold text-right ssmTotQty"></td>
+                        <td class="col-xs-1 font-weight-bold text-right ssmTotPrice"></td>
+                        <td class="col-xs-1 font-weight-bold text-right ssmTotTotal"></td>
+                        <td class="col-xs-1 font-weight-bold text-right ssmTotTaxes"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Deposit</td>
+                        <td class="col-xs-4 "></td>
+                        <td class="col-xs-1"></td>
+                        <td class="col-xs-1"></td>
+                        <td class="col-xs-1 font-weight-bold text-right ssmDeposit"></td>
+                        <td class="col-xs-1"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-xs-2 font-weight-bold">Cash Out</div>
+            <div class="col-xs-1"><input type="button" class="btn btn-success" id="btnAddCashOut" value="+" /></div>
+            <div class="col-xs-9">
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-bordered" id="tblCashOut">
+                <tbody class="bodyCashOut"></tbody>
+                <tfoot>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Sales Collected</td>
+                        <td class="col-xs-4 text-right "></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right font-weight-bold totalSale"></td>
+                        <td class="col-xs-1 text-right"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Monthly Collected</td>
+                        <td class="col-xs-4 text-right "></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right font-weight-bold totalMonthly"></td>
+                        <td class="col-xs-1 text-right"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Shop Collected</td>
+                        <td class="col-xs-4 text-right "></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right font-weight-bold totalShop"></td>
+                        <td class="col-xs-1 text-right"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Partial Credit Collected</td>
+                        <td class="col-xs-4 text-right "></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right font-weight-bold totalPartialCredit"></td>
+                        <td class="col-xs-1 text-right"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Total Cash Out</td>
+                        <td class="col-xs-4 text-right "></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right font-weight-bold cashoutTotal"></td>
+                        <td class="col-xs-1 text-right"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-4 font-weight-bold">Total Cash in hand</td>
+                        <td class="col-xs-4 text-right "></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right"></td>
+                        <td class="col-xs-1 text-right font-weight-bold totalCashInHand"></td>
+                        <td class="col-xs-1 text-right"></td>
+                    </tr>
+                  
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="AddNewPaymentVoucherModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog modal-lg AddNewPaymentVoucherModal" style="width:1170px">
+            <div class="modal-content col-xs-11">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Add New Payment Voucher</h4>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label>Invoice No</label>
+                            <input type="text" class="form-control" id="txt_pvoucher_InvoiceNo" readonly />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Date</label>
+                            <div class="input-group datetimepker">
+                                <input type="text" class="form-control datetimepker linkToDatePermission" id="dtp_pvoucher_ActivityDate" readonly>
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Type</label>
+                            <select class="form-control ddl_pvoucher_ExpenseType" id="ddl_pvoucher_ExpenseType">
+                                <option value="0" disabled>--Select--</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label id="lbl_pvoucher_Expense">Expense</label>
+                            <select class="form-control ddl_pvoucher_Expense" id="ddl_pvoucher_Expense">
+                                <option value="0" disabled>--Select--</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-1" id="div_payment_AddExpensebutton">
+                            <label>Add</label>
+                            <input type="button" class="btn btn-success" id="btn_pvoucher_AddExpenseType" value="+" />
+                            @*<input type="button" class="btn btn-success" id="btn_pvoucher_deleteExpense" value="-" />*@
+
+                        </div>
+                    </div>
+                    <br /> <br />
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Paid</label>
+                            <div class="currencyInputWrap">
+                                <input type="text" class="form-control CurrencyFormattingwithouminus StopPasting" id="txt_pvoucher_Paid" maxlength="8" />
+                                </div>
+                            </div>
+                        <div class="col-sm-3">
+                            <label id="lbl_pvoucher_balance">Balance</label>
+                            <div class="currencyInputWrap">
+                                <input type="text" class="form-control CurrencyFormatting StopPasting" id="txt_pvoucher_Balance" readonly />
+                                </div>
+                            </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                            <label>Gross Amount</label>
+                            <div class="currencyInputWrap">
+                                <input type="text" class="form-control CurrencyFormatting StopPasting" id="txt_pvoucher_GrossAmount" readonly />
+                                </div>
+
+                            </div>
+
+                    </div>
+
+
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Comments</label>
+                            <input type="text" class="form-control" id="txt_pvoucher_Comments" maxlength="250" />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-success" id="btn_pvoucher_Save" value="Save" />
+                    <a href="#" class="btn btn-default close" data-dismiss="modal">Close</a>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="AddNewAdministrativeModal" tabindex="-1" role="basic" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog modal-lg AddNewAdministrativeModal" id="mdl_addExpense" style="width:500px">
+            <div class="modal-content col-xs-11">
+                <div class="modal-header h5" id="div_payment_AddNewExpense">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Add New Administrative Expense</h4>
+                </div>
+                <div class="modal-body ">
+                    <div class="row">
+
+                        <div class="col-sm-4">  <label>Expense Name</label></div>
+                        <div class="col-sm-8"><input type="text" class="form-control" id="txt_pvoucher_AdministrativeExpense" maxlength="50" /></div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-success" id="btn_pvoucher_SaveExpense" value="Save" />
+                    <a href="#" class="btn btn-default" data-dismiss="modal" id="btn_pvoucher_closeExpense">Close</a>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/PaymentVoucher.js"></script>
+<script src="~/Scripts/custom/DailyCashFlow.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        InitDailyCashFlow();
+        PaymentVoucherTrigger();
+        $("#dcf_CurrDate").val(moment().format('YYYY-MM-DD'));
+    })
+</script>

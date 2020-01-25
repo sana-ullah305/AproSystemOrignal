@@ -1,0 +1,103 @@
+USE [AprosysAccounting]
+GO
+
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnpaidCreditSales]    Script Date: 03/08/2019 15:24:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE Procedure [dbo].[Credit_GetUnpaidCreditSales]
+@ActivityStartDate DATETIME,
+@ActivityEndDate DATETIME
+
+AS
+
+BEGIN
+
+SELECT InvoiceNo ,C.Id CustId,C.LastName+' '+C.FirstName CustomerName,ActivityTimestamp SalesDate,Debit  Amount FROM Acc_GL GL 
+INNER Join Customer C ON GL.CustId=C.Id WHERE 
+GL.[TranTypeId] = 2 AND CoaId=11 AND IsSalesCredit=1 AND GL.IsActive=1
+AND Gl.ActivityTimestamp>@ActivityStartDate AND Gl.ActivityTimestamp < @ActivityEndDate
+
+END
+
+GO
+
+
+
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnPaidCustomersInvoice]    Script Date: 03/08/2019 15:25:03 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Credit_GetUnPaidCustomersInvoice]
+@CustomerID int
+AS
+BEGIN 
+SELECT  InvoiceNo,ActivityTimestamp SalesDate,Debit Amount  FROM Acc_GL 
+WHERE
+TranTypeId=2 AND CoaId=11 AND CustId=@CustomerID AND IsSalesCredit=1 AND IsActive=1
+END
+
+
+
+GO
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[Credit_GetUnPaidCustomers]    Script Date: 03/08/2019 15:24:57 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[Credit_GetUnPaidCustomers]
+
+AS
+
+BEGIN
+
+SELECT Distinct C.Id,C.LastName+' '+C.FirstName CustomerName FROM Customer C 
+INNER JOIN Acc_GL GL ON C.Id=GL.CustId
+WHERE IsSalesCredit=1 AND GL.IsActive=1
+
+END
+GO
+
+
+
+
+/****** Object:  StoredProcedure [dbo].[Credit_UpdateUnPaidCreditSales]    Script Date: 03/08/2019 15:25:07 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/* ITS NOT IN USED */
+CREATE Procedure [dbo].[Credit_UpdateUnPaidCreditSales]
+@InvoiceNo NVARCHAR(50),
+@CustID INT,
+@CreditPaidDate DATETIME,
+@ModifiedBy INT 
+
+AS
+
+BEGIN 
+
+UPDATE Acc_GL 
+SET IsSalesCredit=0 ,CreditPaidDate=@CreditPaidDate ,ModifiedBy=@ModifiedBy ,ModifiedDate=GETDATE()
+WHERE InvoiceNo=@InvoiceNo AND CustId=@CustID
+
+END
+
+GO
+
+

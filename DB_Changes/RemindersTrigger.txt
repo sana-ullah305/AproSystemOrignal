@@ -1,0 +1,53 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[Insert_Reminders]    Script Date: 05/28/2019 13:40:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE Procedure [dbo].[Insert_Reminders]
+@SubscriptionID INT , 
+@CurrentCycleRemindercount TinyInt,
+@ReminderLog nvarchar(256), 
+@LastReminderSentDate DATETIME
+
+AS 
+BEGIN 
+INSERT INTO Reminders Values (@SubscriptionID,@CurrentCycleRemindercount,@ReminderLog,@LastReminderSentDate) 
+
+END 
+
+GO
+USE [AprosysAccounting]
+GO
+
+/****** Object:  Trigger [dbo].[tr_InsertOrUpdateSubscriptioin]    Script Date: 05/28/2019 12:47:34 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+	CREATE TRIGGER [dbo].[tr_InsertOrUpdateSubscriptioin]
+	ON [dbo].[Subscription]
+	AFTER  INSERT,UPDATE
+	AS 
+	BEGIN
+	Declare  @DateTime datetime,@SubscriptionID int
+	
+	SET NOCOUNT ON;
+
+	BEGIN
+	SELECT 
+			@DateTime = GETDATE()
+		  ,@SubscriptionID =ISNULL(i.Id,0)
+	FROM inserted i
+	END
+	EXEC Insert_Reminders @SubscriptionID,null,'', @DateTime
+	END
+
+
+GO
+
+

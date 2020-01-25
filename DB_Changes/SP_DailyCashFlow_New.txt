@@ -1,0 +1,170 @@
+USE [AprosysAccounting]
+GO
+/****** Object:  StoredProcedure [dbo].[GetDailyCashFlow]    Script Date: 2/18/2019 7:03:17 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER procedure [dbo].[GetDailyCashFlow]
+(
+	@date datetime
+)
+AS
+BEGIN
+CREATE TABLE #Acc_GL([TranTypeId] int,[CoaId] int,[UserId] INT,[VendorId] int,[CustId] int,[ItemId] int,[UnitPrice] decimal(10,2),[Quantity] decimal(10,2),[TaxPercent] decimal(10,2),[IsGift] bit,[Credit] decimal(10, 2) ,[Debit] decimal(10,2) ,[ActivityTimestamp] datetime,[IsPostpaid] bit)
+	     	INSERT INTO #Acc_GL
+	     	SELECT TranTypeId ,CoaId,UserId,VendorId ,CustId,ItemId ,UnitPrice ,Quantity,TaxPercent ,IsGift ,Credit ,Debit,ActivityTimestamp ,IsPostpaid  FROM Acc_GL 
+			WHERE IsActive=1 AND Acc_GL.ActivityTimestamp > CONVERT(Date,@date) AND Acc_GL.ActivityTimestamp<DATEADD(HH,24,@date)--AND CONVERT(Date,Acc_GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	
+
+CREATE TABLE #temp (TypeName varchar(50),ID int ,Name varchar(50),Quantity decimal(10,2),UnitPrice decimal(10,2),AMOUNT decimal(10,2),TAX decimal(10,2),TYPEID INT , GROUPID INT)
+
+BEGIN
+INSERT INTO #temp 
+
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'OPENING' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	0 AS ID, DATENAME(dw,@date) AS NAME , 0 AS Quantity, 0 AS UnitPrice, ISNULL(TAB.AMOUNT,0) AS AMOUNT, 0 AS TAX, 0 AS TYPEID, 0 AS GROUPID
+FROM
+(SELECT SUM(ISNULL(GL.[Debit],0)) - SUM(ISNULL(GL.[Credit],0)) AS AMOUNT, 'OPENING' AS TYPENAME FROM [Acc_GL] AS GL
+WHERE 
+	GL.[CoaId] = 11 AND GL.[isactive] = 1 AND GL.[ActivityTimestamp] < CONVERT(Date,@date)) AS TAB
+GROUP BY TAB.[TYPENAME],TAB.AMOUNT
+END
+
+
+
+INSERT INTO #temp 
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'Sales' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , SUM(ISNULL(TAB.[Quantity],0)) AS Quantity, AVG(ISNULL(TAB.[UnitPrice],0)) AS UnitPrice, SUM(ISNULL(TAB.AMOUNT,0)) AS AMOUNT, SUM(ISNULL(TAB.[TAX] ,0))AS TAX, 1 AS TYPEID, 1 AS GROUPID
+	FROM
+	(SELECT GL.[ItemId] AS [ID], IT.[Name] AS [NAME], GL.[Quantity], GL.[UnitPrice], GL.[Credit]+GL.[TaxPercent] AS AMOUNT, GL.[TaxPercent] AS TAX, 'Sales' AS TYPENAME
+	FROM #Acc_GL AS GL INNER JOIN [Item] AS IT ON IT.[Id] = GL.[ItemId]
+	WHERE
+	GL.[CoaId] = 14 AND GL.[TranTypeId] = 2  AND GL.[ItemId] IS NOT NULL 
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	GROUP BY
+	TAB.[ID],TAB.[NAME],TAB.[AMOUNT],TAB.[TYPENAME]
+
+INSERT INTO #temp 	
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'Shop' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , SUM(ISNULL(TAB.[Quantity],0)) AS Quantity, AVG(ISNULL(TAB.[UnitPrice],0)) AS UnitPrice, SUM(ISNULL(TAB.AMOUNT,0)) AS AMOUNT, SUM(ISNULL(TAB.[TAX] ,0))AS TAX, 2 AS TYPEID, 1 AS GROUPID
+	FROM 
+	(SELECT COA.[CoaId] AS [ID], COA.[TreeName] AS [NAME], GL.[Quantity], GL.[UnitPrice], GL.[Credit] AS AMOUNT, GL.[TaxPercent] AS TAX, 'Shop' AS TYPENAME
+	FROM #Acc_GL AS GL INNER JOIN [Acc_COA] AS COA ON COA.[CoaId] = GL.[CoaId]
+	WHERE GL.[TranTypeId] = 2  AND GL.[ItemId] IS NULL AND GL.[IsPostpaid] = 1 
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	GROUP BY
+	TAB.[ID],TAB.[NAME],TAB.[AMOUNT],TAB.[TYPENAME],TAB.[Quantity],TAB.[UnitPrice],TAB.[TAX]
+
+
+INSERT INTO #temp 
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'Monthly' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , ISNULL(TAB.[Quantity],0) AS Quantity, 0 AS UnitPrice, SUM(ISNULL(TAB.AMOUNT,0)) AS AMOUNT, 0 AS TAX, 3 AS TYPEID, 1 AS GROUPID
+	FROM
+	(SELECT GL.[CoaId] AS [ID] , CST.[LastName] + ' '+ CST.[FirstName] AS [NAME] ,GL.Quantity, GL.[Debit] AS AMOUNT,'Monthly' AS TYPENAME
+	FROM #Acc_GL AS GL INNER JOIN [Customer] AS CST ON CST.[Id] = GL.[CustId]
+	WHERE GL.[CoaId] = 11 AND GL.[TranTypeId] = 3 AND GL.[IsPostpaid] = 1
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	GROUP BY
+	TAB.[ID],TAB.[NAME],TAB.Quantity,TAB.[TYPENAME]
+
+INSERT INTO #temp 
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'DEPOSIT' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	0 AS ID, 'DEPOSIT' AS NAME , 0 AS Quantity, 0 AS UnitPrice, SUM(ISNULL(TAB.AMOUNT,0)) AS AMOUNT, 0 AS TAX, 4 AS TYPEID, 2 AS GROUPID
+	FROM
+	(SELECT SUM(ISNULL(GL.[Debit],0)) - SUM(ISNULL(GL.[Credit],0)) AS AMOUNT, 'DEPOSIT' AS TYPENAME
+	FROM #Acc_GL AS GL
+	WHERE  GL.[CoaId] = 11 AND GL.[TranTypeId] IN (6) --AND GL.[isactive] = 1 
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	) AS TAB
+	GROUP BY
+	TAB.[TYPENAME]
+
+INSERT INTO #temp 
+SELECT 
+	CASE WHEN COUNT(TAB.[AMOUNT]) = 0 THEN 'CASHOUT' ELSE TAB.[TYPENAME] END AS TYPENAME,
+	ISNULL(TAB.[ID],0) AS ID, ISNULL(TAB.[NAME],'') AS NAME , 0 AS Quantity, 0 AS UnitPrice, -SUM(ISNULL(TAB.AMOUNT,0)) AS AMOUNT, 0 AS TAX, ISNULL(TAB.[TYPEID],5) AS TYPEID, ISNULL(TAB.[GROUPID],3) AS GROUPID
+	FROM
+	(SELECT GL.[VendorId] AS [ID] , VEND.[LastName] + ' '+ VEND.[FirstName] AS [NAME] , SUM(GL.[Credit]) AS AMOUNT, 'CASHOUT' AS TYPENAME,4 AS TYPEID, 3 AS GROUPID
+	FROM #Acc_GL AS GL INNER JOIN [Vendor] AS VEND ON VEND.[ID] = GL.[VendorId]
+	WHERE
+	GL.[CoaId] = 11 AND GL.[TranTypeId] IN (1,4) AND GL.[VendorId] IS NOT NULL
+	--AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	GROUP BY
+	GL.[VendorId], VEND.[LastName], VEND.[FirstName]
+
+	UNION
+
+	SELECT 
+	COA.[CoaId] AS [ID], COA.[TreeName] AS [NAME] , SUM(GL.[Debit]) AS AMOUNT, 'CASHOUT' AS TYPENAME, 5 AS TYPEID, 3 AS GROUPID
+	FROM #Acc_GL AS GL INNER JOIN [Acc_COA] AS COA ON COA.[CoaId] = GL.[CoaId] AND COA.[HeadAccount] = 4
+	WHERE
+	GL.[TranTypeId] IN (4)  AND GL.[VendorId] IS NULL
+	AND CONVERT(Date,GL.[ActivityTimestamp]) = CONVERT(Date,@date)
+	GROUP BY
+	COA.[CoaId], COA.[TreeName]
+	) AS TAB
+	GROUP BY
+	TAB.[TYPENAME],TAB.[ID],TAB.[NAME],TAB.[TYPEID],TAB.[GROUPID]
+
+DROP TABLE #Acc_GL
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='Sales')=0)
+BEGIN insert into #temp 
+select 'Sales' AS TypeName,0 ,'', 0,0,0,0,1,1  --group by TypeName
+END
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='Shop')=0)
+BEGIN insert into #temp 
+select 'Shop' AS TypeName,0 ,'', 0,0,0,0,2,1  --group by TypeName
+END
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='Monthly')=0)
+BEGIN insert into #temp 
+select 'Monthly' AS TypeName,0 ,'' , 0,0,0,0,3,1  --group by TypeName
+END
+
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='CASHOUT')=0)
+BEGIN insert into #temp 
+select 'CASHOUT' AS TypeName,0 ,'' , 0,0,0,0,5,3  --group by TypeName
+END
+
+
+IF((SELECT COUNT(*) FROM #temp WHERE TypeName='DEPOSIT')=0)
+BEGIN insert into #temp 
+select 'DEPOSIT' AS TypeName,0 ,'' , 0,0,0,0,4,2  --group by TypeName
+END
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('Monthly Collected') ELSE 'Monthly Collected' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='Monthly' --group by TypeName
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('Shop Collected') ELSE 'Shop Collected' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='Shop' --group by TypeName
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('Sales Collected') ELSE 'Sales Collected' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='Sales' --group by TypeName
+
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('TOTAL CASH OUT') ELSE 'TOTAL CASH OUT' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName ='CASHOUT' --group by TypeName
+
+
+--insert into #temp 
+--select CASE WHEN COUNT(1)>0 THEN MAX('TOTAL CASH IN HAND') ELSE 'TOTAL CASH IN HAND' END TypeName,0 ,0 , 0,0,ISNULL(SUM(AMOUNT),0)AMOUNT,0,0,0 from #temp where TypeName IN('Sales','Shop','Monthly','OPENING','CASHOUT','DEPOSIT') --group by TypeName
+
+Select * from #temp
+
+DROP TABLE #temp
+
+END
+
+

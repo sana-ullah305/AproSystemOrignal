@@ -1,0 +1,50 @@
+﻿
+<div class="container" style="margin-top:20px">
+    <h3>Report Config</h3>
+    <br/><br />
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2" style="text-align:right;"><label>Title</label></div>
+        <div class="col-sm-6"><input type="text" class="form-control" id="txtTitle" max="50" /></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2" style="text-align:right;"><label>Address</label></div>
+        <div class="col-sm-6"><textarea class="form-control" id="txtAddress" max="400"  style="margin: 0px -2.98828px 0px 0px; width: 558px; height: 93px;"></textarea></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2" style="text-align:right;"><label>Details Title</label></div>
+        <div class="col-sm-6"><input type="text" class="form-control" id="txtDetailsTitle" max="50" /></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2" style="text-align:right;"><label>Details</label></div>
+        <div class="col-sm-6"><textarea class="form-control" id="txtDetails" style="margin: 0px -2.98828px 0px 0px; width: 558px; height: 153px;"></textarea></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2" style="text-align:right;"><label></label></div>
+        <div class="col-sm-6"><label>*Note: Each Line Break in details will convert into bullet line break in report</label></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-3"><label></label></div>
+        <div class="col-sm-6" style="text-align:right;">
+            <input type="button" class="btn btn-success" id="btnSave" value="Save" />
+            <input type="button" class="btn btn-success" id="btnClear" value="Clear" />
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/custom/helper.js"></script>
+<script src="~/Scripts/custom/RepoConfig.js"></script>
+<script src="~/Theme/js/plugins/toastr/toastr.min.js"></script>
+<script src="~/Scripts/custom/GenericLib.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        RepoConfigTrigger();
+    })
+</script>

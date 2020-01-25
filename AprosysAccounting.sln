@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AprosysAccounting", "AprosysAccounting\AprosysAccounting.csproj", "{CEAC65D8-5B65-4CBE-BD64-F9935638101A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApprosysAccDB", "ApprosysAccDB\ApprosysAccDB.csproj", "{A239E3BF-58A4-4EF3-A64E-BA8E198C4128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DUMMY", "DUMMY\DUMMY.csproj", "{308F64CB-B633-44F8-9ACA-51CE402B1466}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEAC65D8-5B65-4CBE-BD64-F9935638101A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEAC65D8-5B65-4CBE-BD64-F9935638101A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEAC65D8-5B65-4CBE-BD64-F9935638101A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEAC65D8-5B65-4CBE-BD64-F9935638101A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A239E3BF-58A4-4EF3-A64E-BA8E198C4128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A239E3BF-58A4-4EF3-A64E-BA8E198C4128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A239E3BF-58A4-4EF3-A64E-BA8E198C4128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A239E3BF-58A4-4EF3-A64E-BA8E198C4128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{308F64CB-B633-44F8-9ACA-51CE402B1466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{308F64CB-B633-44F8-9ACA-51CE402B1466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{308F64CB-B633-44F8-9ACA-51CE402B1466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{308F64CB-B633-44F8-9ACA-51CE402B1466}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
